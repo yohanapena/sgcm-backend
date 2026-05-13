@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from app.modules.pacientes.schema import PacienteCrearRequest, PacienteResponse
+from app.modules.pacientes.schema import PacienteCrearRequest, PacienteResponse, PacienteActualizarRequest
 from app.modules.pacientes.service import PacienteService
 from app.modules.pacientes.repository import PacienteRepository
 from app.core.dependencies import solo_administrativo
@@ -20,3 +20,12 @@ def registrar_paciente(
 ):
     return service.registrar_paciente(datos)
 
+
+@router.put("/{id_paciente}", response_model=PacienteResponse)
+def actualizar_paciente(
+    id_paciente: int,
+    datos: PacienteActualizarRequest,
+    service: PacienteService = Depends(get_service),
+    usuario_actual: dict = Depends(solo_administrativo)
+):
+    return service.actualizar_paciente(id_paciente, datos)

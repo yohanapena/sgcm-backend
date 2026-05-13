@@ -1,8 +1,7 @@
 from app.modules.pacientes.model import Paciente
-from app.modules.pacientes.schema import PacienteCrearRequest
+from app.modules.pacientes.schema import PacienteCrearRequest, PacienteActualizarRequest
 from app.modules.pacientes.contracts import IPacienteRepository
-from app.shared.exceptions.errors import SGCMConflictError
-
+from app.shared.exceptions.errors import SGCMConflictError, SGCMNotFoundError
 
 class PacienteService:
 
@@ -35,3 +34,22 @@ class PacienteService:
         
         # Guardar en la base de datos y retornar
         return self.repositorio.crear_paciente(nuevo_paciente)
+    
+    def actualizar_paciente(self, id_paciente: int, datos: PacienteActualizarRequest) -> Paciente:
+        
+        # Verificar que el paciente existe
+        existe = self.repositorio.obtener_por_id(id_paciente)
+        
+        if not existe:
+            raise SGCMNotFoundError(
+                f"No se encontró un paciente con id {id_paciente}"
+            )
+        
+        # Convertir solo los campos que llegaron (ignorar los None)
+        datos_actualizar = {
+            campo: valor 
+            for campo, valor in datos.model_dump().items() 
+            if valor is not None and valor != ""
+        }
+        
+        return self.repositorio.actualizar_paciente(id_paciente, datos_actualizar)

@@ -53,3 +53,37 @@ class PacienteRepository(IPacienteRepository):
         finally:
             cursor.close()
             conexion.close()
+            
+    def obtener_por_id(self, id_paciente: int) -> Optional[Paciente]:
+        conexion = get_connection()
+        try:
+            cursor = conexion.cursor(dictionary=True)
+            cursor.execute(
+                "SELECT * FROM pacientes WHERE id_paciente = %s",
+                (id_paciente,)
+            )
+            fila = cursor.fetchone()
+            if not fila:
+                return None
+            return Paciente(**fila)
+        finally:
+            cursor.close()
+            conexion.close()
+
+    def actualizar_paciente(self, id_paciente: int, datos: dict) -> Optional[Paciente]:
+        conexion = get_connection()
+        try:
+            # Construir el UPDATE solo con los campos que llegaron
+            campos = ", ".join(f"{campo} = %s" for campo in datos.keys())
+            valores = list(datos.values())
+            valores.append(id_paciente)
+            cursor = conexion.cursor()
+            cursor.execute(
+                f"UPDATE pacientes SET {campos} WHERE id_paciente = %s",
+                valores
+            )
+            conexion.commit()
+            return self.obtener_por_id(id_paciente)
+        finally:
+            cursor.close()
+            conexion.close()

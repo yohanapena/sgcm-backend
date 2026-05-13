@@ -12,3 +12,11 @@ class IPacienteRepository(ABC):
     @abstractmethod
     def obtener_por_identificacion(self, numero_identificacion: str) -> Optional[Paciente]:
         pass
+
+    @abstractmethod
+    def obtener_por_id(self, id_paciente: int) -> Optional[Paciente]:
+        pass
+
+    @abstractmethod
+    def actualizar_paciente(self, id_paciente: int, datos: dict) -> Optional[Paciente]:
+        pass
