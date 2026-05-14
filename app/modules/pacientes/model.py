@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Optional
 from datetime import date
 
@@ -16,3 +16,5 @@ class Paciente:
     sexo: Optional[str] = None
     tipo_sangre: Optional[str] = None
     id_paciente: Optional[int] = None
+    contactos: list = field(default_factory=list)
+    alergias: list = field(default_factory=list)

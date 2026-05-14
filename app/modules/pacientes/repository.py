@@ -65,7 +65,23 @@ class PacienteRepository(IPacienteRepository):
             fila = cursor.fetchone()
             if not fila:
                 return None
-            return Paciente(**fila)
+            paciente = Paciente(**fila)
+
+            # Obtener alergias
+            cursor.execute(
+                "SELECT alergia FROM paciente_alergias WHERE id_paciente_fk = %s",
+                (id_paciente,)
+            )
+            paciente.alergias = [row["alergia"] for row in cursor.fetchall()]
+
+            # Obtener contactos
+            cursor.execute(
+                "SELECT id_contacto, tipo, dato_contacto FROM contactos WHERE id_paciente_fk = %s",
+                (id_paciente,)
+            )
+            paciente.contactos = cursor.fetchall()
+
+            return paciente
         finally:
             cursor.close()
             conexion.close()
