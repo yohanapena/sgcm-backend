@@ -87,3 +87,24 @@ class PacienteRepository(IPacienteRepository):
         finally:
             cursor.close()
             conexion.close()
+            
+    def buscar_pacientes(self, criterio: str) -> list:
+        conexion = get_connection()
+        try:
+            cursor = conexion.cursor(dictionary=True)
+            busqueda = f"%{criterio}%"
+            cursor.execute(
+                """
+                SELECT * FROM pacientes 
+                WHERE nombre LIKE %s 
+                OR primer_apellido LIKE %s 
+                OR segundo_apellido LIKE %s
+                OR numero_identificacion LIKE %s
+                """,
+                (busqueda, busqueda, busqueda, busqueda)
+            )
+            filas = cursor.fetchall()
+            return [Paciente(**fila) for fila in filas]
+        finally:
+            cursor.close()
+            conexion.close()

@@ -29,3 +29,21 @@ def actualizar_paciente(
     usuario_actual: dict = Depends(solo_administrativo)
 ):
     return service.actualizar_paciente(id_paciente, datos)
+
+
+@router.get("/buscar", response_model=list[PacienteResponse])
+def buscar_pacientes(
+    q: str,
+    service: PacienteService = Depends(get_service),
+    usuario_actual: dict = Depends(solo_administrativo)
+):
+    return service.buscar_pacientes(q)
+
+
+@router.get("/{id_paciente}", response_model=PacienteResponse)
+def obtener_paciente(
+    id_paciente: int,
+    service: PacienteService = Depends(get_service),
+    usuario_actual: dict = Depends(solo_administrativo)
+):
+    return service.obtener_por_id(id_paciente)

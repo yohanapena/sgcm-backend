@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Optional
+from typing import Optional, List
 from app.modules.pacientes.model import Paciente
 
 
@@ -19,4 +19,8 @@ class IPacienteRepository(ABC):
 
     @abstractmethod
     def actualizar_paciente(self, id_paciente: int, datos: dict) -> Optional[Paciente]:
+        pass
+
+    @abstractmethod
+    def buscar_pacientes(self, criterio: str) -> List[Paciente]:
         pass
