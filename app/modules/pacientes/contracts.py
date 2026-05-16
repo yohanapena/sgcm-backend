@@ -24,3 +24,15 @@ class IPacienteRepository(ABC):
     @abstractmethod
     def buscar_pacientes(self, criterio: str) -> List[Paciente]:
         pass
+
+    @abstractmethod
+    def agregar_alergia(self, id_paciente_fk: int, alergia: str) -> dict:
+        pass
+
+    @abstractmethod
+    def listar_alergias(self, id_paciente_fk: int) -> list:
+        pass
+
+    @abstractmethod
+    def eliminar_alergia(self, id_alergia: int, id_paciente_fk: int) -> bool:
+        pass

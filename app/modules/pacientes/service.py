@@ -73,3 +73,27 @@ class PacienteService:
             )
         
         return paciente
+    
+    def agregar_alergia(self, id_paciente: int, alergia: str) -> dict:
+        # Verificar que el paciente existe
+        existe = self.repositorio.obtener_por_id(id_paciente)
+        if not existe:
+            raise SGCMNotFoundError(f"No se encontró un paciente con id {id_paciente}")
+        
+        return self.repositorio.agregar_alergia(id_paciente, alergia)
+
+    def listar_alergias(self, id_paciente: int) -> list:
+        # Verificar que el paciente existe
+        existe = self.repositorio.obtener_por_id(id_paciente)
+        if not existe:
+            raise SGCMNotFoundError(f"No se encontró un paciente con id {id_paciente}")
+        
+        return self.repositorio.listar_alergias(id_paciente)
+
+    def eliminar_alergia(self, id_paciente: int, id_alergia: int) -> dict:
+        # Verificar que la alergia pertenece al paciente
+        eliminado = self.repositorio.eliminar_alergia(id_alergia, id_paciente)
+        if not eliminado:
+            raise SGCMNotFoundError(f"No se encontró la alergia con id {id_alergia} para este paciente")
+        
+        return {"deleted": True}

@@ -124,3 +124,44 @@ class PacienteRepository(IPacienteRepository):
         finally:
             cursor.close()
             conexion.close()
+            
+    def agregar_alergia(self, id_paciente_fk: int, alergia: str) -> dict:
+        conexion = get_connection()
+        try:
+            cursor = conexion.cursor()
+            cursor.execute(
+                "INSERT INTO paciente_alergias (id_paciente_fk, alergia) VALUES (%s, %s)",
+                (id_paciente_fk, alergia)
+            )
+            conexion.commit()
+            return {"id": cursor.lastrowid, "id_paciente_fk": id_paciente_fk, "alergia": alergia}
+        finally:
+            cursor.close()
+            conexion.close()
+
+    def listar_alergias(self, id_paciente_fk: int) -> list:
+        conexion = get_connection()
+        try:
+            cursor = conexion.cursor(dictionary=True)
+            cursor.execute(
+                "SELECT id, id_paciente_fk, alergia FROM paciente_alergias WHERE id_paciente_fk = %s",
+                (id_paciente_fk,)
+            )
+            return cursor.fetchall()
+        finally:
+            cursor.close()
+            conexion.close()
+
+    def eliminar_alergia(self, id_alergia: int, id_paciente_fk: int) -> bool:
+        conexion = get_connection()
+        try:
+            cursor = conexion.cursor()
+            cursor.execute(
+                "DELETE FROM paciente_alergias WHERE id = %s AND id_paciente_fk = %s",
+                (id_alergia, id_paciente_fk)
+            )
+            conexion.commit()
+            return cursor.rowcount > 0
+        finally:
+            cursor.close()
+            conexion.close()

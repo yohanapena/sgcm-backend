@@ -20,6 +20,7 @@ def registrar_paciente(
 ):
     return service.registrar_paciente(datos)
 
+
 @router.get("/buscar", response_model=list[PacienteResponse])
 def buscar_pacientes(
     q: str,
@@ -27,6 +28,7 @@ def buscar_pacientes(
     usuario_actual: dict = Depends(solo_administrativo)
 ):
     return service.buscar_pacientes(q)
+
 
 @router.put("/{id_paciente}", response_model=PacienteResponse)
 def actualizar_paciente(
@@ -38,7 +40,6 @@ def actualizar_paciente(
     return service.actualizar_paciente(id_paciente, datos)
 
 
-
 @router.get("/{id_paciente}", response_model=PacienteResponse)
 def obtener_paciente(
     id_paciente: int,
@@ -46,3 +47,32 @@ def obtener_paciente(
     usuario_actual: dict = Depends(solo_administrativo)
 ):
     return service.obtener_por_id(id_paciente)
+
+
+@router.get("/{id_paciente}/alergias")
+def listar_alergias(
+    id_paciente: int,
+    service: PacienteService = Depends(get_service),
+    usuario_actual: dict = Depends(solo_administrativo)
+):
+    return service.listar_alergias(id_paciente)
+
+
+@router.post("/{id_paciente}/alergias")
+def agregar_alergia(
+    id_paciente: int,
+    datos: dict,
+    service: PacienteService = Depends(get_service),
+    usuario_actual: dict = Depends(solo_administrativo)
+):
+    return service.agregar_alergia(id_paciente, datos["alergia"])
+
+
+@router.delete("/{id_paciente}/alergias/{id_alergia}")
+def eliminar_alergia(
+    id_paciente: int,
+    id_alergia: int,
+    service: PacienteService = Depends(get_service),
+    usuario_actual: dict = Depends(solo_administrativo)
+):
+    return {"data": service.eliminar_alergia(id_paciente, id_alergia)}
