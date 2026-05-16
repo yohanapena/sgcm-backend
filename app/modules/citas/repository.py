@@ -81,3 +81,71 @@ class CitaRepository:
             "id_horario_medico_fk": cita.id_horario_medico_fk,
             "id_paciente_fk": cita.id_paciente_fk
         }
+    
+    def obtener_cita(self, id_cita: int):
+        connection = get_connection()
+        cursor = connection.cursor(dictionary=True)
+
+        query = """
+            SELECT * FROM citas
+            WHERE id_cita = %s
+        """
+
+        cursor.execute(query, (id_cita,))
+        cita = cursor.fetchone()
+
+        cursor.close()
+        connection.close()
+
+        return cita
+
+    def registrar_historial(
+        self,
+        id_cita: int,
+        estado_anterior: str,
+        estado_nuevo: str,
+        motivo: str
+    ):
+        connection = get_connection()
+        cursor = connection.cursor()
+
+        query = """
+            INSERT INTO historial_citas (
+                estado_anterior,
+                estado_nuevo,
+                motivo,
+                id_cita_fk
+            )
+            VALUES (%s, %s, %s, %s)
+        """
+
+        valores = (
+            estado_anterior,
+            estado_nuevo,
+            motivo,
+            id_cita
+        )
+
+        cursor.execute(query, valores)
+
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+
+    def cancelar_cita(self, id_cita: int):
+        connection = get_connection()
+        cursor = connection.cursor()
+
+        query = """
+            UPDATE citas
+            SET estado = 'Cancelada'
+            WHERE id_cita = %s
+        """
+
+        cursor.execute(query, (id_cita,))
+
+        connection.commit()
+
+        cursor.close()
+        connection.close()

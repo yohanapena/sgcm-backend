@@ -2,7 +2,8 @@ from fastapi import APIRouter, HTTPException
 
 from app.modules.citas.schema import (
     CitaCrearRequest,
-    CitaResponse
+    CitaResponse,
+    CitaCancelarRequest
 )
 
 from app.modules.citas.service import (
@@ -32,3 +33,13 @@ def crear_cita(cita: CitaCrearRequest):
             status_code=409,
             detail=str(e)
         )
+    
+@router.patch("/{id_cita}/cancelar")
+def cancelar_cita(
+    id_cita: int,
+    data: CitaCancelarRequest
+):
+    return cita_service.cancelar_cita(
+        id_cita=id_cita,
+        motivo=data.motivo
+    )
