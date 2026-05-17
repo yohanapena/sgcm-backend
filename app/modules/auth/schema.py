@@ -30,3 +30,12 @@ class MeDataResponse(BaseModel):
 
 class UsuarioDataResponse(BaseModel):
     data: UsuarioResponse
+
+
+class UsuarioEstadoResponse(BaseModel):
+    id_usuario: int
+    status: str
+
+
+class UsuarioEstadoDataResponse(BaseModel):
+    data: UsuarioEstadoResponse

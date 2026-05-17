@@ -9,6 +9,7 @@ from app.modules.auth.schema import (
     MeResponse,
     MeDataResponse,
     UsuarioDataResponse,
+    UsuarioEstadoDataResponse,
 )
 from app.modules.auth.service import AuthService
 from app.modules.usuarios.schema import UsuarioCrearRequest, UsuarioEstadoRequest, UsuarioResponse
@@ -65,14 +66,20 @@ async def obtener_usuario(
     return UsuarioDataResponse(data=usuario)
 
 
-@router.patch("/usuarios/{id_usuario}/estado", response_model=UsuarioResponse)
+@router.patch("/usuarios/{id_usuario}/estado", response_model=UsuarioEstadoDataResponse)
 async def cambiar_estado_usuario(
     id_usuario: int,
     datos: UsuarioEstadoRequest,
     service: AuthService = Depends(get_auth_service),
     _: dict = Depends(solo_administrativo),
 ):
-    return service.cambiar_estado_usuario(id_usuario, datos.estado.value)
+    usuario_actualizado = service.cambiar_estado_usuario(id_usuario, datos.estado.value)
+    return UsuarioEstadoDataResponse(
+        data={
+            "id_usuario": usuario_actualizado.id_usuario,
+            "status": usuario_actualizado.estado.value,
+        }
+    )
 
 
 @router.get("/me", response_model=MeDataResponse)
