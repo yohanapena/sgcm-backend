@@ -56,12 +56,6 @@ class PacienteService:
     
     def buscar_pacientes(self, criterio: str) -> list:
         resultados = self.repositorio.buscar_pacientes(criterio)
-        
-        if not resultados:
-            raise SGCMNotFoundError(
-                f"No se encontraron pacientes con el criterio '{criterio}'"
-            )
-        
         return resultados
     
     def obtener_por_id(self, id_paciente: int) -> Paciente:
