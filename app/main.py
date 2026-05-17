@@ -41,8 +41,8 @@ def read_root():
 from app.modules.pacientes.routes import router as pacientes_router
 app.include_router(pacientes_router, prefix="/pacientes", tags=["pacientes"])
 
-# from app.modules.historias_clinicas.routes import router as historias_clinicas_router
-# app.include_router(historias_clinicas_router, prefix="/historias_clinicas", tags=["historias_clinicas"])
+from app.modules.historias_clinicas.routes import router as historias_clinicas_router
+app.include_router(historias_clinicas_router, prefix="/historias_clinicas", tags=["historias_clinicas"])
 
 # from app.modules.signos_vitales.routes import router as signos_vitales_router
 # app.include_router(signos_vitales_router, prefix="/signos_vitales", tags=["signos_vitales"])
