@@ -58,7 +58,7 @@ class UsuarioRepository(IUsuarioRepository):
         try:
             cursor = conexion.cursor(dictionary=True)
             query = (
-                "SELECT u.id_usuario, u.usuario, u.contrasena, u.rol, u.estado, "
+                "SELECT u.id_usuario, u.usuario, u.rol, u.estado, "
                 "u.fecha_creacion, u.id_medico_fk, m.nombre AS medico_nombre "
                 "FROM usuarios u "
                 "LEFT JOIN medicos m ON u.id_medico_fk = m.id_medico "
