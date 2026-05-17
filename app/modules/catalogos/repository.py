@@ -42,3 +42,22 @@ class CatalogoRepository:
         finally:
             cursor.close()
             conexion.close()
+
+
+    def listar_horarios(self, medico_id: int = None) -> list:
+        conexion = get_connection()
+        try:
+            cursor = conexion.cursor(dictionary=True)
+            if medico_id is not None:
+                cursor.execute(
+                    "SELECT id_horario_medico, dia_semana, fecha_vigencia_inicio, fecha_vigencia_fin, id_medico_fk, CAST(hora_inicial AS CHAR) as hora_inicial, CAST(hora_final AS CHAR) as hora_final FROM horarios_medicos WHERE id_medico_fk = %s",
+                    (int(medico_id),)
+                )
+            else:
+                cursor.execute(
+                    "SELECT id_horario_medico, dia_semana, fecha_vigencia_inicio, fecha_vigencia_fin, id_medico_fk, CAST(hora_inicial AS CHAR) as hora_inicial, CAST(hora_final AS CHAR) as hora_final FROM horarios_medicos"
+                )
+            return cursor.fetchall()
+        finally:
+            cursor.close()
+            conexion.close()

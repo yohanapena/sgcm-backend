@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends
+from typing import Optional
 from app.modules.catalogos.schema import ServicioResponse, EpsResponse, RegimenResponse, EspecialidadResponse
 from app.modules.catalogos.repository import CatalogoRepository
 from app.core.dependencies import administrativo_o_medico
@@ -40,3 +41,12 @@ def obtener_especialidades(
     usuario_actual: dict = Depends(administrativo_o_medico)
 ):
     return {"data": repo.listar_especialidades()}
+
+
+@router.get("/horarios")
+def obtener_horarios(
+    medico_id: Optional[int] = None,
+    repo: CatalogoRepository = Depends(get_repository),
+    usuario_actual: dict = Depends(administrativo_o_medico)
+):
+    return {"data": repo.listar_horarios(medico_id)}
