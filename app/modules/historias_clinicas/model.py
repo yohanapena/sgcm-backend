@@ -9,6 +9,5 @@ class HistoriaClinica:
     id_historia_clinica: Optional[int] = None
     resumen: Optional[str] = None
     fecha_apertura: Optional[date] = None
-    alergias: Optional[str] = None
     antecedentes_personales: Optional[str] = None
     antecedentes_familiares: Optional[str] = None

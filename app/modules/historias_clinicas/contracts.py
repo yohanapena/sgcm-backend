@@ -12,3 +12,7 @@ class IHistoriaClinicaRepository(ABC):
     @abstractmethod
     def obtener_por_paciente(self, id_paciente_fk: int) -> Optional[HistoriaClinica]:
         pass
+
+    @abstractmethod
+    def actualizar_historia_clinica(self, id_historia_clinica: int, datos: dict) -> Optional[HistoriaClinica]:
+        pass
