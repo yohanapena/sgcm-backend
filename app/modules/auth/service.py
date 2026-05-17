@@ -105,6 +105,21 @@ class AuthService:
 
         return self._mapear_response(usuario_actualizado)
 
+    def obtener_usuario_por_id(self, id_usuario: int) -> UsuarioResponse:
+        usuario = None
+        try:
+            usuario = self.repository.obtener_usuario_por_id(id_usuario)
+        except Exception:
+            usuario = None
+
+        if usuario is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Usuario no encontrado",
+            )
+
+        return self._mapear_response(usuario)
+
     def _mapear_response(self, usuario: Usuario) -> UsuarioResponse:
         return UsuarioResponse(
             id_usuario=usuario.id_usuario,

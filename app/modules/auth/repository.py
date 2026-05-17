@@ -20,3 +20,6 @@ class AuthRepository(IAuthRepository):
 
     def crear_usuario(self, usuario: Usuario) -> Usuario:
         return self._usuario_repository.crear_usuario(usuario)
+
+    def obtener_usuario_por_id(self, id_usuario: int) -> Optional[Usuario]:
+        return self._usuario_repository.obtener_por_id(id_usuario)

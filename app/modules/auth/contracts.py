@@ -18,5 +18,9 @@ class IAuthRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def obtener_usuario_por_id(self, id_usuario: int) -> Optional[Usuario]:
+        raise NotImplementedError
+
+    @abstractmethod
     def crear_usuario(self, usuario: Usuario) -> Usuario:
         raise NotImplementedError

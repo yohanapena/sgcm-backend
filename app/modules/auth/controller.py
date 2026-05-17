@@ -3,7 +3,13 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, status
 
 from app.core.dependencies import get_usuario_actual, solo_administrativo
-from app.modules.auth.schema import LoginRequest, LoginResponse, MeResponse, MeDataResponse
+from app.modules.auth.schema import (
+    LoginRequest,
+    LoginResponse,
+    MeResponse,
+    MeDataResponse,
+    UsuarioDataResponse,
+)
 from app.modules.auth.service import AuthService
 from app.modules.usuarios.schema import UsuarioCrearRequest, UsuarioEstadoRequest, UsuarioResponse
 
@@ -47,6 +53,16 @@ async def listar_usuarios(
     _: dict = Depends(solo_administrativo),
 ):
     return service.listar_usuarios()
+
+
+@router.get("/usuarios/{id_usuario}", response_model=UsuarioDataResponse)
+async def obtener_usuario(
+    id_usuario: int,
+    service: AuthService = Depends(get_auth_service),
+    _: dict = Depends(solo_administrativo),
+):
+    usuario = service.obtener_usuario_por_id(id_usuario)
+    return UsuarioDataResponse(data=usuario)
 
 
 @router.patch("/usuarios/{id_usuario}/estado", response_model=UsuarioResponse)

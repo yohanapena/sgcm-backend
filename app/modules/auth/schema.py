@@ -1,6 +1,7 @@
 from typing import Optional
 
 from pydantic import BaseModel
+from app.modules.usuarios.schema import UsuarioResponse
 
 
 class LoginRequest(BaseModel):
@@ -25,3 +26,7 @@ class MeResponse(BaseModel):
 
 class MeDataResponse(BaseModel):
     data: MeResponse
+
+
+class UsuarioDataResponse(BaseModel):
+    data: UsuarioResponse
