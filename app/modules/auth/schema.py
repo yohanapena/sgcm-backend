@@ -21,3 +21,7 @@ class MeResponse(BaseModel):
     usuario: str
     rol: str
     id_medico_fk: Optional[int] = None
+
+
+class MeDataResponse(BaseModel):
+    data: MeResponse

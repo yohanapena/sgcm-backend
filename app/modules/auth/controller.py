@@ -3,7 +3,7 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, status
 
 from app.core.dependencies import get_usuario_actual, solo_administrativo
-from app.modules.auth.schema import LoginRequest, LoginResponse, MeResponse
+from app.modules.auth.schema import LoginRequest, LoginResponse, MeResponse, MeDataResponse
 from app.modules.auth.service import AuthService
 from app.modules.usuarios.schema import UsuarioCrearRequest, UsuarioEstadoRequest, UsuarioResponse
 
@@ -59,14 +59,16 @@ async def cambiar_estado_usuario(
     return service.cambiar_estado_usuario(id_usuario, datos.estado.value)
 
 
-@router.get("/me", response_model=MeResponse)
+@router.get("/me", response_model=MeDataResponse)
 async def get_me(usuario_actual: dict = Depends(get_usuario_actual)):
     """
     Obtiene la información del usuario autenticado.
+    Requiere JWT token válido en header Authorization.
     """
-    return MeResponse(
+    me = MeResponse(
         id_usuario=usuario_actual.get("id_usuario"),
         usuario=usuario_actual.get("usuario"),
         rol=usuario_actual.get("rol"),
         id_medico_fk=usuario_actual.get("id_medico_fk"),
     )
+    return MeDataResponse(data=me)
