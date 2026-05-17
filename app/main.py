@@ -35,8 +35,8 @@ def read_root():
 # from app.modules.usuarios.routes import router as usuarios_router
 # app.include_router(usuarios_router, prefix="/usuarios", tags=["usuarios"])
 
-# from app.modules.catalogos.routes import router as catalogos_router
-# app.include_router(catalogos_router, prefix="/catalogos", tags=["catalogos"])
+from app.modules.catalogos.routes import router as catalogos_router
+app.include_router(catalogos_router, prefix="/catalogos", tags=["catalogos"])
 
 from app.modules.pacientes.routes import router as pacientes_router
 app.include_router(pacientes_router, prefix="/pacientes", tags=["pacientes"])
