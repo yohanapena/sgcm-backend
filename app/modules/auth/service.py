@@ -17,23 +17,25 @@ class AuthService:
         self.repository = repository or AuthRepository()
 
     def login(self, usuario: str, contrasena: str) -> LoginResponse:
+        GENERIC_AUTH_ERROR = "Credenciales incorrectas o usuario inactivo"
+
         usuario_encontrado = self.repository.obtener_usuario_por_nombre(usuario)
         if usuario_encontrado is None:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Usuario o contraseña inválidos",
-            )
-
-        if usuario_encontrado.estado != UsuarioEstado.ACTIVO:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="El usuario se encuentra inactivo",
+                detail=GENERIC_AUTH_ERROR,
             )
 
         if not verificar_contrasena(contrasena, usuario_encontrado.contrasena):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Usuario o contraseña inválidos",
+                detail=GENERIC_AUTH_ERROR,
+            )
+
+        if usuario_encontrado.estado != UsuarioEstado.ACTIVO:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail=GENERIC_AUTH_ERROR,
             )
 
         payload = {
@@ -47,8 +49,10 @@ class AuthService:
 
         return LoginResponse(
             access_token=token,
+            id_usuario=usuario_encontrado.id_usuario,
             usuario=usuario_encontrado.usuario,
             rol=usuario_encontrado.rol.value,
+            estado=usuario_encontrado.estado.value,
             id_medico_fk=usuario_encontrado.id_medico_fk,
         )
 

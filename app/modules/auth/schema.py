@@ -12,9 +12,28 @@ class LoginRequest(BaseModel):
 class LoginResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
+    id_usuario: int
     usuario: str
     rol: str
+    estado: str
     id_medico_fk: Optional[int] = None
+
+
+class LoginUser(BaseModel):
+    id_usuario: int
+    usuario: str
+    rol: str
+    estado: str
+    id_medico_fk: Optional[int] = None
+
+
+class LoginData(BaseModel):
+    token: str
+    user: LoginUser
+
+
+class LoginDataResponse(BaseModel):
+    data: LoginData
 
 
 class MeResponse(BaseModel):

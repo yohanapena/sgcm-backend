@@ -6,6 +6,7 @@ from app.core.dependencies import get_usuario_actual, solo_administrativo
 from app.modules.auth.schema import (
     LoginRequest,
     LoginResponse,
+    LoginDataResponse,
     MeResponse,
     MeDataResponse,
     UsuarioDataResponse,
@@ -22,7 +23,7 @@ def get_auth_service() -> AuthService:
     return AuthService()
 
 
-@router.post("/login", response_model=LoginResponse)
+@router.post("/login", response_model=LoginDataResponse)
 async def login(
     datos: LoginRequest,
     service: AuthService = Depends(get_auth_service),
@@ -36,7 +37,15 @@ async def login(
       "contrasena": "contraseña123"
     }
     """
-    return service.login(datos.usuario, datos.contrasena)
+    result = service.login(datos.usuario, datos.contrasena)
+    user = {
+        "id_usuario": result.id_usuario,
+        "usuario": result.usuario,
+        "rol": result.rol,
+        "estado": result.estado,
+        "id_medico_fk": result.id_medico_fk,
+    }
+    return {"data": {"token": result.access_token, "user": user}}
 
 
 @router.post("/usuarios", response_model=UsuarioResponse, status_code=status.HTTP_201_CREATED)

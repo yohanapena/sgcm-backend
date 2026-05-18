@@ -31,9 +31,11 @@ def read_root():
 # Routers de los módulos principales.
 from app.modules.auth.routes import router as auth_router
 from app.modules.usuarios.routes import router as usuarios_router
+from app.modules.usuarios.dashboard_routes import dashboard_router
 
 app.include_router(auth_router, prefix="/auth", tags=["auth"])
 app.include_router(usuarios_router, prefix="/usuarios", tags=["usuarios"])
+app.include_router(dashboard_router, prefix="/dashboard", tags=["dashboard"])
 
 # from app.modules.pacientes.routes import router as pacientes_router
 # app.include_router(pacientes_router, prefix="/pacientes", tags=["pacientes"])

@@ -139,6 +139,51 @@ class UsuarioRepository(IUsuarioRepository):
         finally:
             conexion.close()
 
+    def obtener_resumen_dashboard(self):
+        conexion = get_connection()
+        try:
+            cursor = conexion.cursor(dictionary=True)
+
+            # Conteo usuarios por estado
+            cursor.execute("""
+                SELECT estado, COUNT(*) as total 
+                FROM usuarios 
+                GROUP BY estado
+            """)
+            usuarios_raw = {row["estado"]: row["total"] for row in cursor.fetchall()}
+
+            usuarios = {
+                "Activo": usuarios_raw.get("Activo", 0),
+                "Inactivo": usuarios_raw.get("Inactivo", 0),
+            }
+
+            # Total pacientes
+            cursor.execute("SELECT COUNT(*) as total FROM pacientes")
+            pacientes_count = cursor.fetchone()["total"]
+
+            # Médicos activos
+            cursor.execute(
+                "SELECT COUNT(*) as total FROM medicos WHERE estado = 'Activo'"
+            )
+            medicos_count = cursor.fetchone()["total"]
+
+            # Citas de hoy
+            cursor.execute("""
+                SELECT COUNT(*) as total FROM citas 
+                WHERE fecha = CURRENT_DATE()
+            """)
+            citas_hoy_count = cursor.fetchone()["total"]
+
+            return {
+                "usuarios": usuarios,
+                "pacientes_count": pacientes_count,
+                "medicos_count": medicos_count,
+                "citas_hoy_count": citas_hoy_count
+            }
+        finally:
+            cursor.close()
+            conexion.close()
+
     def _mapear_usuario(self, fila: dict) -> Usuario:
         return Usuario(
             id_usuario=fila.get("id_usuario"),

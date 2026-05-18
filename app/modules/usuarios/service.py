@@ -88,6 +88,9 @@ class UsuarioService(IUsuarioService):
         usuario_actualizado = self.repository.actualizar_usuario(id_usuario, datos)
         return self._mapear_response(usuario_actualizado)
 
+    def obtener_resumen_dashboard(self):
+        return self.repository.obtener_resumen_dashboard()
+
     def _mapear_response(self, usuario: Usuario) -> UsuarioResponse:
         return UsuarioResponse(
             id_usuario=usuario.id_usuario,
