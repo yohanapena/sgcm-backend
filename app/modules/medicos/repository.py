@@ -1,5 +1,5 @@
 from app.core.database import get_connection
-
+from datetime import timedelta
 
 class MedicoRepository:
 
@@ -88,3 +88,161 @@ class MedicoRepository:
         connection.close()
 
         return resultado
+    
+    def verificar_superposicion(
+        self,
+        id_medico,
+        dia_semana,
+        hora_inicial,
+        hora_final
+    ):
+
+        connection = get_connection()
+
+        cursor = connection.cursor(
+            dictionary=True
+        )
+
+        query = """
+        SELECT *
+        FROM horarios_medicos
+        WHERE id_medico_fk = %s
+        AND dia_semana = %s
+        AND (
+            (%s BETWEEN hora_inicial AND hora_final)
+            OR
+            (%s BETWEEN hora_inicial AND hora_final)
+            OR
+            (hora_inicial BETWEEN %s AND %s)
+        )
+        """
+
+        cursor.execute(
+            query,
+            (
+                id_medico,
+                dia_semana,
+                hora_inicial,
+                hora_final,
+                hora_inicial,
+                hora_final
+            )
+        )
+
+        resultado = cursor.fetchone()
+
+        cursor.close()
+        connection.close()
+
+        return resultado
+    
+    def crear_horario(
+        self,
+        id_medico,
+        horario
+    ):
+
+        connection = get_connection()
+
+        cursor = connection.cursor(
+            dictionary=True
+        )
+
+        query = """
+        INSERT INTO horarios_medicos (
+            dia_semana,
+            fecha_vigencia_inicio,
+            fecha_vigencia_fin,
+            hora_inicial,
+            hora_final,
+            id_medico_fk
+        )
+        VALUES (%s, %s, %s, %s, %s, %s)
+        """
+
+        valores = (
+            horario.dia_semana,
+            horario.fecha_vigencia_inicio,
+            horario.fecha_vigencia_fin,
+            horario.hora_inicial,
+            horario.hora_final,
+            id_medico
+        )
+
+        cursor.execute(query, valores)
+
+        connection.commit()
+
+        id_horario = cursor.lastrowid
+
+        cursor.close()
+        connection.close()
+
+        return {
+            "id_horario_medico": id_horario,
+            "dia_semana": horario.dia_semana,
+            "fecha_vigencia_inicio": horario.fecha_vigencia_inicio,
+            "fecha_vigencia_fin": horario.fecha_vigencia_fin,
+            "hora_inicial": horario.hora_inicial,
+            "hora_final": horario.hora_final,
+            "id_medico_fk": id_medico
+        }
+    
+    def obtener_horarios(
+        self,
+        id_medico
+    ):
+
+        connection = get_connection()
+
+        cursor = connection.cursor(
+            dictionary=True
+       )
+
+        query = """
+        SELECT *
+        FROM horarios_medicos
+        WHERE id_medico_fk = %s
+        """
+
+        cursor.execute(
+            query,
+            (id_medico,)
+        )
+
+        resultados = cursor.fetchall()
+
+        for horario in resultados:
+
+            if isinstance(horario["hora_inicial"], timedelta):
+
+                total_seconds = int(
+                    horario["hora_inicial"].total_seconds()
+                )
+
+                horas = total_seconds // 3600
+                minutos = (total_seconds % 3600) // 60
+                segundos = total_seconds % 60
+
+                horario["hora_inicial"] = (
+                    f"{horas:02}:{minutos:02}:{segundos:02}"
+                )
+
+            if isinstance(horario["hora_final"], timedelta):
+
+                total_seconds = int(
+                    horario["hora_final"].total_seconds()
+                )
+
+                horas = total_seconds // 3600
+                minutos = (total_seconds % 3600) // 60
+                segundos = total_seconds % 60
+
+                horario["hora_final"] = (
+                    f"{horas:02}:{minutos:02}:{segundos:02}"
+                )
+
+        cursor.close()
+        connection.close()
+
+        return resultados

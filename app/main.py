@@ -20,7 +20,6 @@ app.add_middleware(
 
 registrar_handlers(app)
 
-
 @app.get("/", tags=["salud"])
 def read_root():
     return {"success": True, "message": "SGCM Backend está funcionando"}

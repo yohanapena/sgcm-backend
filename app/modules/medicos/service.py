@@ -45,3 +45,39 @@ class MedicoService:
             "tarjeta_profesional": medico.tarjeta_profesional,
             "estado": "Activo"
         }
+    
+    def agregar_horario(
+        self,
+        id_medico,
+        horario
+    ):
+
+        horario_existente = (
+            self.repository.verificar_superposicion(
+                id_medico,
+                horario.dia_semana,
+                horario.hora_inicial,
+                horario.hora_final
+            )
+        )
+
+        if horario_existente:
+
+            raise HTTPException(
+                status_code=409,
+                detail="El horario se superpone con otro existente"
+            )
+
+        return self.repository.crear_horario(
+            id_medico,
+            horario
+        )
+    
+    def obtener_horarios(
+        self,
+        id_medico
+    ):
+
+        return self.repository.obtener_horarios(
+            id_medico
+        )
