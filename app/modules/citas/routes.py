@@ -34,7 +34,7 @@ def crear_cita(cita: CitaCrearRequest):
             detail=str(e)
         )
     
-@router.patch("/{id_cita}/cancelar")
+@router.put("/{id_cita}/cancelar")
 def cancelar_cita(
     id_cita: int,
     data: CitaCancelarRequest
