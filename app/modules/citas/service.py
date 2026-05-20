@@ -57,3 +57,9 @@ class CitaService:
         return {
             "message": "Cita cancelada correctamente"
         }
+    
+    def obtener_citas_paciente(self):
+        pass
+
+    def obtener_citas_medico(self):
+        pass

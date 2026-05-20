@@ -149,3 +149,12 @@ class CitaRepository:
 
         cursor.close()
         connection.close()
+
+    def obtener_por_paciente(self):
+        pass
+
+    def obtener_por_medico(self):
+        pass
+
+    def marcar_atendida(self):
+        pass
