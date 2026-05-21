@@ -8,7 +8,7 @@ class ConsultaService(IConsultaService):
 
         self.repository = ConsultaRepository()
         self.cita_repository = CitaRepository()
-        
+
     def registrar_consulta(
             self,
             consulta
@@ -47,4 +47,13 @@ class ConsultaService(IConsultaService):
 
         return self.repository.obtener_por_historia(
             id_historia_clinica_fk
+        )
+    
+    def obtener_servicios_consulta(
+        self,
+        id_consulta
+    ):
+
+        return self.repository.obtener_servicios_consulta(
+            id_consulta
         )

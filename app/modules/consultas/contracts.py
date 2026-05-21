@@ -15,6 +15,9 @@ class IConsultaRepository(ABC):
     def agregar_servicio(self):
         pass
 
+    @abstractmethod
+    def obtener_servicios_consulta(self):
+        pass
 
 class IConsultaService(ABC):
 

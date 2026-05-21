@@ -69,6 +69,36 @@ class ConsultaRepository(IConsultaRepository):
         cursor.close()
         connection.close()
 
+    def obtener_servicios_consulta(
+        self,
+        id_consulta
+    ):
+
+        connection = get_connection()
+
+        cursor = connection.cursor(dictionary=True)
+
+        query = """
+        SELECT s.id_servicio,
+               s.nombre
+        FROM consultas_servicios cs
+        INNER JOIN servicios s
+            ON cs.id_servicio_fk = s.id_servicio
+        WHERE cs.id_consulta_fk = %s
+        """
+
+        cursor.execute(
+            query,
+            (id_consulta,)
+        )
+
+        servicios = cursor.fetchall()
+
+        cursor.close()
+        connection.close()
+
+        return servicios
+
     def obtener_por_historia(
         self,
         id_historia_clinica_fk
