@@ -50,5 +50,5 @@ app.include_router(medicos_router, prefix="/medicos", tags=["medicos"])
 from app.modules.citas.routes import router as citas_router
 app.include_router(citas_router, prefix="/citas", tags=["citas"])
 
-# from app.modules.consultas.routes import router as consultas_router
-# app.include_router(consultas_router, prefix="/consultas", tags=["consultas"])
+from app.modules.consultas.routes import router as consultas_router
+app.include_router(consultas_router, prefix="/consultas", tags=["consultas"])
