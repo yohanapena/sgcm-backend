@@ -58,8 +58,27 @@ class CitaService:
             "message": "Cita cancelada correctamente"
         }
     
-    def obtener_citas_paciente(self):
-        pass
+    def obtener_citas_paciente(
+        self,
+        id_paciente,
+        fecha_inicio=None,
+        fecha_fin=None
+    ):
 
-    def obtener_citas_medico(self):
-        pass
+        return self.repository.obtener_por_paciente(
+            id_paciente,
+            fecha_inicio,
+            fecha_fin
+        )
+
+
+    def obtener_citas_medico(
+        self,
+        id_medico,
+        fecha=None
+    ):
+
+        return self.repository.obtener_por_medico(
+            id_medico,
+            fecha
+        )

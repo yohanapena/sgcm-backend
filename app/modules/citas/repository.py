@@ -150,11 +150,110 @@ class CitaRepository:
         cursor.close()
         connection.close()
 
-    def obtener_por_paciente(self):
-        pass
-
-    def obtener_por_medico(self):
-        pass
-
     def marcar_atendida(self):
         pass
+
+    def obtener_por_paciente(
+        self,
+        id_paciente,
+        fecha_inicio=None,
+        fecha_fin=None
+    ):
+
+        connection = get_connection()
+
+        cursor = connection.cursor(dictionary=True)
+
+        query = """
+        SELECT
+            c.id_cita,
+            c.fecha,
+            c.hora,
+            c.estado,
+            CONCAT(
+                m.nombre,
+                ' ',
+                m.primer_apellido
+            ) AS medico_nombre
+        FROM citas c
+        INNER JOIN horarios_medicos hm
+            ON c.id_horario_medico_fk = hm.id_horario_medico
+        INNER JOIN medicos m
+            ON hm.id_medico_fk = m.id_medico
+        WHERE c.id_paciente_fk = %s
+        """
+
+        valores = [id_paciente]
+
+        if fecha_inicio and fecha_fin:
+
+            query += """
+            AND c.fecha BETWEEN %s AND %s
+            """
+
+            valores.extend([fecha_inicio, fecha_fin])
+
+        query += """
+        ORDER BY c.fecha, c.hora
+        """
+
+        cursor.execute(query, tuple(valores))
+
+        resultado = cursor.fetchall()
+
+        cursor.close()
+        connection.close()
+
+        return resultado
+    
+    def obtener_por_medico(
+        self,
+        id_medico,
+        fecha=None
+    ):
+
+        connection = get_connection()
+
+        cursor = connection.cursor(dictionary=True)
+
+        query = """
+        SELECT
+            c.id_cita,
+            c.fecha,
+            c.hora,
+            c.estado,
+            CONCAT(
+                p.nombre,
+                ' ',
+                p.primer_apellido
+            ) AS paciente_nombre
+        FROM citas c
+        INNER JOIN horarios_medicos hm
+            ON c.id_horario_medico_fk = hm.id_horario_medico
+        INNER JOIN pacientes p
+            ON c.id_paciente_fk = p.id_paciente
+        WHERE hm.id_medico_fk = %s
+        """
+
+        valores = [id_medico]
+
+        if fecha:
+
+            query += """
+            AND c.fecha = %s
+            """
+
+            valores.append(fecha)
+
+        query += """
+        ORDER BY c.fecha, c.hora
+        """
+
+        cursor.execute(query, tuple(valores))
+
+        resultado = cursor.fetchall()
+
+        cursor.close()
+        connection.close()
+
+        return resultado

@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 
 
 class ICitaRepository(ABC):
-
     @abstractmethod
     def crear_cita(self):
         pass
@@ -27,15 +26,21 @@ class ICitaRepository(ABC):
     def registrar_historial(self):
         pass
 
-    @abstractmethod
-    def obtener_por_paciente(self):
+    def obtener_por_paciente(
+        self,
+        id_paciente,
+        fecha_inicio=None,
+        fecha_fin=None
+    ):
         pass
 
-    @abstractmethod
-    def obtener_por_medico(self):
-        pass
-
-
+    def obtener_por_medico(
+        self,
+        id_medico,
+        fecha=None
+    ):
+        pass    
+        
 class ICitaService(ABC):
 
     @abstractmethod

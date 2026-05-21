@@ -43,3 +43,27 @@ def cancelar_cita(
         id_cita=id_cita,
         motivo=data.motivo
     )
+
+@router.get("/paciente/{id_paciente}")
+def obtener_citas_paciente(
+    id_paciente: int,
+    fecha_inicio: str = None,
+    fecha_fin: str = None
+):
+
+    return cita_service.obtener_citas_paciente(
+        id_paciente,
+        fecha_inicio,
+        fecha_fin
+    )
+
+@router.get("/medico/{id_medico}")
+def obtener_citas_medico(
+    id_medico: int,
+    fecha: str = None
+):
+
+    return cita_service.obtener_citas_medico(
+        id_medico,
+        fecha
+    )
