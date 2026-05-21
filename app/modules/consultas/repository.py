@@ -52,7 +52,7 @@ class ConsultaRepository(IConsultaRepository):
         cursor = connection.cursor()
 
         query = """
-        INSERT INTO consultas_servicios (
+        INSERT IGNORE INTO consultas_servicios (
             id_consulta_fk,
             id_servicio_fk
         )

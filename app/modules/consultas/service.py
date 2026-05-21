@@ -1,17 +1,18 @@
 from app.modules.consultas.contracts import IConsultaService
 from app.modules.consultas.repository import ConsultaRepository
-
+from app.modules.citas.repository import CitaRepository
 
 class ConsultaService(IConsultaService):
 
     def __init__(self):
 
         self.repository = ConsultaRepository()
-
+        self.cita_repository = CitaRepository()
+        
     def registrar_consulta(
-        self,
-        consulta
-    ):
+            self,
+            consulta
+        ):
 
         id_consulta = self.repository.crear_consulta(
             consulta
@@ -24,9 +25,20 @@ class ConsultaService(IConsultaService):
                 servicio_id
             )
 
-        return {
-            "mensaje": "Consulta registrada"
-        }
+            self.cita_repository.marcar_atendida(
+                consulta.id_cita_fk
+            )
+
+            self.cita_repository.registrar_historial(
+                id_cita=consulta.id_cita_fk,
+                estado_anterior="Agendada",
+                estado_nuevo="Atendida",
+                motivo="Consulta registrada"
+            )
+
+            return {
+                "mensaje": "Consulta registrada"
+            }
 
     def obtener_consultas(
         self,

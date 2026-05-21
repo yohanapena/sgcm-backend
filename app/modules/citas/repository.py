@@ -1,6 +1,5 @@
 from app.core.database import get_connection
 
-
 class CitaRepository:
 
     def verificar_disponibilidad(
@@ -150,9 +149,31 @@ class CitaRepository:
         cursor.close()
         connection.close()
 
-    def marcar_atendida(self):
-        pass
+    def marcar_atendida(
+        self,
+        id_cita
+    ):
 
+        connection = get_connection()
+
+        cursor = connection.cursor()
+
+        query = """
+        UPDATE citas
+        SET estado = 'Atendida'
+        WHERE id_cita = %s
+        """
+
+        cursor.execute(
+            query,
+            (id_cita,)
+        )
+
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+    
     def obtener_por_paciente(
         self,
         id_paciente,
