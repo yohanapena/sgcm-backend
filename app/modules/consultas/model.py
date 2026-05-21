@@ -1,15 +1,15 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Optional
-from datetime import datetime
 
 
 @dataclass
 class Consulta:
 
-    id_cita_fk: int
-    motivo_consulta: str
+    observacion: str
     diagnostico: str
-    tratamiento: str
+    id_cita_fk: int
+    id_historia_clinica_fk: int
 
     id_consulta: Optional[int] = None
-    fecha_creacion: Optional[datetime] = None
+
+    servicios: list = field(default_factory=list)

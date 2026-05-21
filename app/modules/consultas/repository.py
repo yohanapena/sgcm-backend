@@ -4,10 +4,44 @@ from app.core.database import get_connection
 
 class ConsultaRepository(IConsultaRepository):
 
-    def crear_consulta(self):
-        pass
+    def crear_consulta(
+        self,
+        consulta
+    ):
 
-    def asociar_servicio(
+        connection = get_connection()
+
+        cursor = connection.cursor()
+
+        query = """
+        INSERT INTO consultas (
+            observacion,
+            diagnostico,
+            id_cita_fk,
+            id_historia_clinica_fk
+        )
+        VALUES (%s, %s, %s, %s)
+        """
+
+        valores = (
+            consulta.observacion,
+            consulta.diagnostico,
+            consulta.id_cita_fk,
+            consulta.id_historia_clinica_fk
+        )
+
+        cursor.execute(query, valores)
+
+        connection.commit()
+
+        id_consulta = cursor.lastrowid
+
+        cursor.close()
+        connection.close()
+
+        return id_consulta
+
+    def agregar_servicio(
         self,
         id_consulta,
         id_servicio
@@ -18,7 +52,7 @@ class ConsultaRepository(IConsultaRepository):
         cursor = connection.cursor()
 
         query = """
-        INSERT IGNORE INTO consultas_servicios (
+        INSERT INTO consultas_servicios (
             id_consulta_fk,
             id_servicio_fk
         )
@@ -33,36 +67,35 @@ class ConsultaRepository(IConsultaRepository):
         connection.commit()
 
         cursor.close()
-        connection.close()    
+        connection.close()
 
-    def obtener_servicios_consulta(self):
-        pass
-
-    def obtener_historia_clinica(self):
-        pass
-
-    def obtener_consultas_historia(
+    def obtener_por_historia(
         self,
-        id_paciente
+        id_historia_clinica_fk
     ):
 
         connection = get_connection()
 
-        cursor = connection.cursor(dictionary=True)
+        cursor = connection.cursor(
+            dictionary=True
+        )
 
         query = """
         SELECT
-            co.*,
+            co.id_consulta,
             c.fecha,
-            c.hora
+            co.diagnostico,
+            co.observacion
         FROM consultas co
         INNER JOIN citas c
             ON co.id_cita_fk = c.id_cita
-        WHERE c.id_paciente_fk = %s
-        ORDER BY c.fecha DESC, c.hora DESC
+        WHERE co.id_historia_clinica_fk = %s
         """
 
-        cursor.execute(query, (id_paciente,))
+        cursor.execute(
+            query,
+            (id_historia_clinica_fk,)
+        )
 
         resultado = cursor.fetchall()
 

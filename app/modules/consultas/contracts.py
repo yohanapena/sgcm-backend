@@ -8,19 +8,11 @@ class IConsultaRepository(ABC):
         pass
 
     @abstractmethod
-    def asociar_servicio(self):
+    def obtener_por_historia(self):
         pass
 
     @abstractmethod
-    def obtener_servicios_consulta(self):
-        pass
-
-    @abstractmethod
-    def obtener_historia_clinica(self):
-        pass
-
-    @abstractmethod
-    def obtener_consultas_historia(self):
+    def agregar_servicio(self):
         pass
 
 
@@ -31,9 +23,5 @@ class IConsultaService(ABC):
         pass
 
     @abstractmethod
-    def obtener_servicios(self):
-        pass
-
-    @abstractmethod
-    def obtener_historia_clinica(self):
+    def obtener_consultas(self):
         pass

@@ -1,22 +1,23 @@
 from pydantic import BaseModel
-from typing import Optional, List
-from datetime import datetime
+from typing import List
 
 
 class ConsultaCrearRequest(BaseModel):
 
     id_cita_fk: int
-    motivo_consulta: str
+    id_historia_clinica_fk: int
     diagnostico: str
-    tratamiento: str
-    servicios: List[int] = []
+    observacion: str
+
+    servicios_ids: List[int]
 
 
 class ConsultaResponse(BaseModel):
 
     id_consulta: int
-    id_cita_fk: int
-    motivo_consulta: str
+    fecha: str
+
     diagnostico: str
-    tratamiento: str
-    fecha_creacion: Optional[datetime]
+    observacion: str
+
+    servicios: List[str]
