@@ -1,5 +1,6 @@
 from app.modules.citas.repository import CitaRepository
 from fastapi import HTTPException
+from datetime import date
 
 class SGCMConflictError(Exception):
     pass
@@ -82,3 +83,21 @@ class CitaService:
             id_medico,
             fecha
         )
+    
+    def obtener_citas_dashboard(
+        self,
+        id_medico,
+        fecha=None
+    ):
+
+        if fecha is None:
+            fecha = date.today()
+
+        citas = self.repository.obtener_citas_medico_fecha(
+            id_medico,
+            fecha
+        )
+
+        return {
+            "data": citas
+        }

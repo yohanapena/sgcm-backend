@@ -278,3 +278,38 @@ class CitaRepository:
         connection.close()
 
         return resultado
+    
+    def obtener_citas_medico_fecha(
+        self,
+        id_medico,
+        fecha
+    ):
+
+        connection = get_connection()
+
+        cursor = connection.cursor(dictionary=True)
+
+        query = """
+        SELECT 
+            c.id_cita,
+            c.hora,
+            c.estado,
+            c.id_paciente_fk
+        FROM citas c
+        INNER JOIN horarios_medicos hm
+            ON c.id_horario_medico_fk = hm.id_horario_medico
+        WHERE hm.id_medico_fk = %s
+        AND c.fecha = %s
+        """
+
+        cursor.execute(
+            query,
+            (id_medico, fecha)
+        )
+
+        citas = cursor.fetchall()
+
+        cursor.close()
+        connection.close()
+
+        return citas

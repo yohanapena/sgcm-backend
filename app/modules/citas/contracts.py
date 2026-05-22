@@ -7,6 +7,10 @@ class ICitaRepository(ABC):
         pass
 
     @abstractmethod
+    def obtener_citas_medico_fecha(self):
+        pass
+
+    @abstractmethod
     def obtener_por_id(self):
         pass
 

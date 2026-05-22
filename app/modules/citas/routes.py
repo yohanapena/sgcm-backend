@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 
 from app.modules.citas.schema import (
     CitaCrearRequest,
@@ -64,6 +65,19 @@ def obtener_citas_medico(
 ):
 
     return cita_service.obtener_citas_medico(
+        id_medico,
+        fecha
+    )
+
+@router.get(
+    "/dashboard/medico/{id_medico}/citas"
+)
+def obtener_citas_dashboard(
+    id_medico: int,
+    fecha: str = Query(default=None)
+):
+
+    return cita_service.obtener_citas_dashboard(
         id_medico,
         fecha
     )
