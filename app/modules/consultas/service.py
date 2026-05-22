@@ -1,6 +1,7 @@
 from app.modules.consultas.contracts import IConsultaService
 from app.modules.consultas.repository import ConsultaRepository
 from app.modules.citas.repository import CitaRepository
+from app.modules.signos_vitales.repository import SignosVitalesRepository
 
 class ConsultaService(IConsultaService):
 
@@ -8,6 +9,7 @@ class ConsultaService(IConsultaService):
 
         self.repository = ConsultaRepository()
         self.cita_repository = CitaRepository()
+        self.signos_repository = SignosVitalesRepository()
 
     def registrar_consulta(
             self,
@@ -17,6 +19,25 @@ class ConsultaService(IConsultaService):
         id_consulta = self.repository.crear_consulta(
             consulta
         )
+
+        if consulta.signos_vitales:
+
+            try:
+
+                self.signos_repository.crear_signos_vitales({
+                    "peso": consulta.signos_vitales.peso,
+                    "estatura": consulta.signos_vitales.estatura,
+                    "temperatura": consulta.signos_vitales.temperatura,
+                    "presion_arterial": consulta.signos_vitales.presion_arterial,
+                    "frecuencia_cardiaca": consulta.signos_vitales.frecuencia_cardiaca,
+                    "saturacion_oxigeno": consulta.signos_vitales.saturacion_oxigeno,
+                    "id_historia_clinica_fk": consulta.id_historia_clinica_fk,
+                    "id_consulta_fk": id_consulta
+                })
+
+            except Exception as e:
+
+                print("Error registrando signos vitales:", e)
 
         for servicio_id in consulta.servicios_ids:
 

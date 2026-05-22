@@ -1,7 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional
 
-
 class SignosVitalesCreate(BaseModel):
 
     peso: float

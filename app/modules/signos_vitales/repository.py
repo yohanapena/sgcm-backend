@@ -30,14 +30,14 @@ class SignosVitalesRepository(
         """
 
         valores = (
-            signos.peso,
-            signos.estatura,
-            signos.temperatura,
-            signos.presion_arterial,
-            signos.frecuencia_cardiaca,
-            signos.saturacion_oxigeno,
-            signos.id_historia_clinica_fk,
-            signos.id_consulta_fk
+            signos["peso"],
+            signos["estatura"],
+            signos["temperatura"],
+            signos["presion_arterial"],
+            signos["frecuencia_cardiaca"],
+            signos["saturacion_oxigeno"],
+            signos["id_historia_clinica_fk"],
+            signos["id_consulta_fk"]
         )
 
         cursor.execute(query, valores)
@@ -55,7 +55,7 @@ class SignosVitalesRepository(
         connection = get_connection()
 
         cursor = connection.cursor(
-            dictionary=True
+            dictionary=True     
         )
 
         query = """
