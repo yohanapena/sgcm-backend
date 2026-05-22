@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+from app.modules.medicos.schema import MedicoUpdate
 
 from app.modules.medicos.schema import (
     MedicoCrearRequest,
@@ -53,4 +54,15 @@ def obtener_horarios(
 
     return medico_service.obtener_horarios(
         id_medico
+    )
+
+@router.put("/{id_medico}")
+def actualizar_medico(
+    id_medico: int,
+    medico: MedicoUpdate
+):
+
+    return medico_service.actualizar_medico(
+        id_medico,
+        medico
     )

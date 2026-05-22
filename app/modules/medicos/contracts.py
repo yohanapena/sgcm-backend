@@ -8,6 +8,14 @@ class IMedicoRepository(ABC):
         pass
 
     @abstractmethod
+    def actualizar_medico(self, id_medico, medico):
+        pass
+
+    @abstractmethod
+    def obtener_medico_por_id(self, id_medico):
+        pass
+
+    @abstractmethod
     def obtener_por_id(self):
         pass
 

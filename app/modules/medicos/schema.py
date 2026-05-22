@@ -35,3 +35,12 @@ class HorarioResponse(BaseModel):
     hora_inicial: time
     hora_final: time
     id_medico_fk: int
+
+from pydantic import BaseModel
+
+class MedicoUpdate(BaseModel):
+    nombre: str
+    primer_apellido: str
+    segundo_apellido: str
+    tarjeta_profesional: str
+    estado: str
