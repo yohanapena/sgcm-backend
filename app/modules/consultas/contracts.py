@@ -19,6 +19,15 @@ class IConsultaRepository(ABC):
     def obtener_servicios_consulta(self):
         pass
 
+    @abstractmethod
+    def obtener_historia_clinica(self, id_paciente: int):
+        pass
+
+    @abstractmethod
+    def obtener_consultas_historia(self, id_historia_clinica: int):
+        pass
+
+
 class IConsultaService(ABC):
 
     @abstractmethod
@@ -27,4 +36,8 @@ class IConsultaService(ABC):
 
     @abstractmethod
     def obtener_consultas(self):
+        pass
+
+    @abstractmethod
+    def obtener_historia_clinica_paciente(self, id_paciente: int):
         pass

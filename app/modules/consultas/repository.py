@@ -133,3 +133,36 @@ class ConsultaRepository(IConsultaRepository):
         connection.close()
 
         return resultado
+    
+    def obtener_historia_clinica(self, id_paciente: int):
+        connection = get_connection()
+        cursor = connection.cursor(dictionary=True)
+        query = """
+        SELECT hc.id_historia_clinica, hc.resumen, hc.fecha_apertura,
+        hc.antecedentes_personales, hc.antecedentes_familiares,
+        p.nombre, p.primer_apellido, p.numero_identificacion
+        FROM historias_clinicas hc
+        INNER JOIN pacientes p ON hc.id_paciente_fk = p.id_paciente
+        WHERE hc.id_paciente_fk = %s
+        """
+        cursor.execute(query, (id_paciente,))
+        resultado = cursor.fetchone()
+        cursor.close()
+        connection.close()
+        return resultado
+
+    def obtener_consultas_historia(self, id_historia_clinica: int):
+        connection = get_connection()
+        cursor = connection.cursor(dictionary=True)
+        query = """
+        SELECT co.id_consulta, c.fecha, co.diagnostico, co.observacion
+        FROM consultas co
+        INNER JOIN citas c ON co.id_cita_fk = c.id_cita
+        WHERE co.id_historia_clinica_fk = %s
+        ORDER BY c.fecha DESC
+        """
+        cursor.execute(query, (id_historia_clinica,))
+        resultado = cursor.fetchall()
+        cursor.close()
+        connection.close()
+        return resultado
