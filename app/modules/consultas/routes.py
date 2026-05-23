@@ -40,3 +40,9 @@ def obtener_servicios_consulta(
     return consulta_service.obtener_servicios_consulta(
         id_consulta
     )
+
+@router.get("/historia-clinica/paciente/{id_paciente}")
+def obtener_historia_clinica_paciente(
+    id_paciente: int
+):
+    return consulta_service.obtener_historia_clinica_paciente(id_paciente)

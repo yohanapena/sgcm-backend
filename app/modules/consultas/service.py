@@ -78,3 +78,32 @@ class ConsultaService(IConsultaService):
         return self.repository.obtener_servicios_consulta(
             id_consulta
         )
+        
+    def obtener_historia_clinica_paciente(
+        self,
+        id_paciente: int
+    ):
+        from app.modules.historias_clinicas.repository import HistoriaClinicaRepository
+        
+        historia_repo = HistoriaClinicaRepository()
+        
+        # Obtener la historia clínica del paciente
+        historia = historia_repo.obtener_por_paciente(id_paciente)
+        
+        if not historia:
+            return {"paciente": None, "historia_clinica": None, "consultas": []}
+        
+        # Obtener las consultas ordenadas por fecha DESC
+        consultas = self.repository.obtener_por_historia(historia.id_historia_clinica)
+        
+        return {
+            "historia_clinica": {
+                "id_historia_clinica": historia.id_historia_clinica,
+                "id_paciente_fk": historia.id_paciente_fk,
+                "resumen": historia.resumen,
+                "fecha_apertura": str(historia.fecha_apertura) if historia.fecha_apertura else None,
+                "antecedentes_personales": historia.antecedentes_personales,
+                "antecedentes_familiares": historia.antecedentes_familiares,
+            },
+            "consultas": consultas
+        }
