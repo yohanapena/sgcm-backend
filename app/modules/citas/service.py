@@ -139,3 +139,17 @@ class CitaService:
                 "id_cita": id_cita
             }
         }
+    
+    def obtener_cita(self, id_cita):
+
+        cita = self.repository.obtener_cita_por_id(id_cita)
+
+        if not cita:
+            raise HTTPException(
+                status_code=404,
+                detail="Cita no encontrada"
+            )
+
+        return {
+            "data": cita
+        }

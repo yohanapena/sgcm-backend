@@ -83,6 +83,11 @@ def obtener_citas_dashboard(
         fecha
     )
 
+@router.get("/{id_cita}")
+def obtener_cita(id_cita: int):
+
+    return cita_service.obtener_cita(id_cita)
+
 @router.put("/{id_cita}")
 def actualizar_cita(
     id_cita: int,
@@ -93,3 +98,4 @@ def actualizar_cita(
         id_cita,
         datos
     )
+
