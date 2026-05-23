@@ -5,7 +5,8 @@ from app.modules.medicos.schema import (
     MedicoCrearRequest,
     MedicoResponse,
     HorarioCrearRequest,
-    HorarioResponse
+    HorarioResponse,
+    MedicoEstadoUpdate
 )
 
 from app.modules.medicos.service import (
@@ -65,4 +66,15 @@ def actualizar_medico(
     return medico_service.actualizar_medico(
         id_medico,
         medico
+    )
+
+@router.patch("/{id_medico}/estado")
+def cambiar_estado_medico(
+    id_medico: int,
+    datos: MedicoEstadoUpdate
+):
+    
+    return medico_service.cambiar_estado(
+        id_medico,
+        datos
     )

@@ -303,3 +303,42 @@ class MedicoRepository:
         connection.close()
 
         return medico_actualizado
+    
+    def cambiar_estado(self, id_medico, estado):
+
+        connection = get_connection()
+        cursor = connection.cursor(dictionary=True)
+
+        cursor.execute(
+            "SELECT * FROM medicos WHERE id_medico = %s",
+            (id_medico,)
+        )
+
+        medico = cursor.fetchone()
+
+        if not medico:
+            cursor.close()
+            connection.close()
+            return None
+
+        query = """
+            UPDATE medicos
+            SET estado = %s
+            WHERE id_medico = %s
+        """
+
+        cursor.execute(query, (estado, id_medico))
+
+        connection.commit()
+
+        cursor.execute(
+            "SELECT id_medico, estado FROM medicos WHERE id_medico = %s",
+            (id_medico,)
+        )
+
+        resultado = cursor.fetchone()
+
+        cursor.close()
+        connection.close()
+
+        return resultado

@@ -44,3 +44,6 @@ class MedicoUpdate(BaseModel):
     segundo_apellido: str
     tarjeta_profesional: str
     estado: str
+
+class MedicoEstadoUpdate(BaseModel):
+    estado: str
