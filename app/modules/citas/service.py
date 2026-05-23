@@ -32,18 +32,25 @@ class CitaService:
         return self.repository.crear_cita(cita)
     
     def cancelar_cita(self, id_cita: int, motivo: str):
+
         cita = self.repository.obtener_cita(id_cita)
 
         if not cita:
             raise HTTPException(
                 status_code=404,
-                detail="La cita no existe"
+                detail="Cita no encontrada"
             )
 
         if cita["estado"] == "Cancelada":
             raise HTTPException(
                 status_code=400,
                 detail="La cita ya está cancelada"
+            )
+
+        if cita["estado"] == "Atendida":
+            raise HTTPException(
+                status_code=400,
+                detail="No se puede cancelar una cita Atendida"
             )
 
         self.repository.registrar_historial(
@@ -53,12 +60,15 @@ class CitaService:
             motivo=motivo
         )
 
-        self.repository.cancelar_cita(id_cita)
+        cita_cancelada = self.repository.cancelar_cita(
+            id_cita,
+            motivo
+        )
 
         return {
-            "message": "Cita cancelada correctamente"
+            "data": cita_cancelada
         }
-    
+
     def obtener_citas_paciente(
         self,
         id_paciente,

@@ -39,6 +39,17 @@ def crear_cita(cita: CitaCrearRequest):
 @router.put("/{id_cita}/cancelar")
 def cancelar_cita(
     id_cita: int,
+    request: CitaCancelarRequest
+):
+
+    return cita_service.cancelar_cita(
+        id_cita,
+        request.motivo
+    )
+
+@router.put("/{id_cita}/cancelar")
+def cancelar_cita(
+    id_cita: int,
     data: CitaCancelarRequest
 ):
     return cita_service.cancelar_cita(

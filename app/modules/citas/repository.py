@@ -132,22 +132,33 @@ class CitaRepository:
         cursor.close()
         connection.close()
 
-    def cancelar_cita(self, id_cita: int):
+    def cancelar_cita(self, id_cita: int, motivo: str):
+
         connection = get_connection()
-        cursor = connection.cursor()
+        cursor = connection.cursor(dictionary=True)
 
         query = """
             UPDATE citas
-            SET estado = 'Cancelada'
+            SET estado = 'Cancelada',
+                observacion = %s
             WHERE id_cita = %s
         """
 
-        cursor.execute(query, (id_cita,))
+        cursor.execute(query, (motivo, id_cita))
 
         connection.commit()
 
+        cursor.execute(
+            "SELECT * FROM citas WHERE id_cita = %s",
+            (id_cita,)
+        )
+
+        cita_actualizada = cursor.fetchone()
+
         cursor.close()
         connection.close()
+
+        return cita_actualizada
 
     def marcar_atendida(
         self,
