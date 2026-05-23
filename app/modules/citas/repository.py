@@ -313,3 +313,70 @@ class CitaRepository:
         connection.close()
 
         return citas
+    
+    def actualizar_cita(self, id_cita, datos):
+
+        conexion = get_connection()
+        cursor = conexion.cursor(dictionary=True)
+
+        cursor.execute(
+            "SELECT * FROM citas WHERE id_cita = %s",
+            (id_cita,)
+        )
+
+        cita = cursor.fetchone()
+
+        if not cita:
+            cursor.close()
+            conexion.close()
+            return None
+
+        campos = []
+        valores = []
+
+        if "fecha" in datos:
+            campos.append("fecha = %s")
+            valores.append(datos["fecha"])
+
+        if "hora" in datos:
+            campos.append("hora = %s")
+            valores.append(datos["hora"])
+
+        if "observacion" in datos:
+            campos.append("observacion = %s")
+            valores.append(datos["observacion"])
+
+        if campos:
+
+            query = f"""
+                UPDATE citas
+                SET {", ".join(campos)}
+                WHERE id_cita = %s
+            """
+
+            valores.append(id_cita)
+
+            cursor.execute(query, tuple(valores))
+            conexion.commit()
+
+        cursor.close()
+        conexion.close()
+
+        return cita
+    
+    def obtener_cita_por_id(self, id_cita):
+
+        conexion = get_connection()
+        cursor = conexion.cursor(dictionary=True)
+
+        cursor.execute(
+            "SELECT * FROM citas WHERE id_cita = %s",
+            (id_cita,)
+        )
+
+        cita = cursor.fetchone()
+
+        cursor.close()
+        conexion.close()
+
+        return cita

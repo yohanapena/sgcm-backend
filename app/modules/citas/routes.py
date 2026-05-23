@@ -4,7 +4,8 @@ from fastapi import APIRouter, HTTPException, Query
 from app.modules.citas.schema import (
     CitaCrearRequest,
     CitaResponse,
-    CitaCancelarRequest
+    CitaCancelarRequest,
+    CitaActualizarRequest
 )
 
 from app.modules.citas.service import (
@@ -80,4 +81,15 @@ def obtener_citas_dashboard(
     return cita_service.obtener_citas_dashboard(
         id_medico,
         fecha
+    )
+
+@router.put("/{id_cita}")
+def actualizar_cita(
+    id_cita: int,
+    datos: CitaActualizarRequest
+):
+
+    return cita_service.actualizar_cita(
+        id_cita,
+        datos
     )

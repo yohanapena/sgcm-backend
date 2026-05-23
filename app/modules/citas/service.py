@@ -101,3 +101,41 @@ class CitaService:
         return {
             "data": citas
         }
+    
+    def actualizar_cita(self, id_cita, datos):
+
+        cita = self.repository.obtener_cita_por_id(id_cita)
+
+        if not cita:
+            raise HTTPException(
+                status_code=404,
+                detail="Cita no encontrada"
+            )
+
+        if cita["estado"] != "Agendada":
+            raise HTTPException(
+                status_code=400,
+                detail="No se puede modificar una cita en estado Cancelada/Atendida"
+            )
+
+        datos_actualizar = {}
+
+        if datos.fecha is not None:
+            datos_actualizar["fecha"] = datos.fecha
+
+        if datos.hora is not None:
+            datos_actualizar["hora"] = datos.hora
+
+        if datos.observacion is not None:
+            datos_actualizar["observacion"] = datos.observacion
+
+        self.repository.actualizar_cita(
+            id_cita,
+            datos_actualizar
+        )
+
+        return {
+            "data": {
+                "id_cita": id_cita
+            }
+        }
