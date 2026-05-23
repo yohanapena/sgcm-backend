@@ -6,46 +6,30 @@ class SignosVitalesRepository(
     ISignosVitalesRepository
 ):
 
-    def crear_signos_vitales(
-        self,
-        signos
-    ):
-
+    def crear_signos_vitales(self, signos):
         connection = get_connection()
-
-        cursor = connection.cursor()
-
+        cursor = connection.cursor(dictionary=True)
         query = """
         INSERT INTO signos_vitales (
-            peso,
-            estatura,
-            temperatura,
-            presion_arterial,
-            frecuencia_cardiaca,
-            saturacion_oxigeno,
-            id_historia_clinica_fk,
-            id_consulta_fk
-        )
-        VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
+            peso, estatura, temperatura, presion_arterial,
+            frecuencia_cardiaca, saturacion_oxigeno,
+            id_historia_clinica_fk, id_consulta_fk
+        ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
         """
-
         valores = (
-            signos["peso"],
-            signos["estatura"],
-            signos["temperatura"],
-            signos["presion_arterial"],
-            signos["frecuencia_cardiaca"],
-            signos["saturacion_oxigeno"],
-            signos["id_historia_clinica_fk"],
-            signos["id_consulta_fk"]
+            signos["peso"], signos["estatura"],
+            signos["temperatura"], signos["presion_arterial"],
+            signos["frecuencia_cardiaca"], signos["saturacion_oxigeno"],
+            signos["id_historia_clinica_fk"], signos["id_consulta_fk"]
         )
-
         cursor.execute(query, valores)
-
         connection.commit()
-
+        id_signo = cursor.lastrowid
+        cursor.execute("SELECT * FROM signos_vitales WHERE id_signo = %s", (id_signo,))
+        resultado = cursor.fetchone()
         cursor.close()
         connection.close()
+        return resultado
 
     def obtener_por_historia(
         self,
@@ -105,3 +89,6 @@ class SignosVitalesRepository(
         connection.close()
 
         return resultado
+    
+    def crear(self, signos):
+        return self.crear_signos_vitales(signos)
