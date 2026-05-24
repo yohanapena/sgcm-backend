@@ -321,6 +321,11 @@ class CitaRepository:
         LEFT JOIN medicos m ON m.id_medico = hm.id_medico_fk
         LEFT JOIN especialidades_medicos em ON em.id_medico_fk = m.id_medico
         LEFT JOIN especialidades e ON e.id_especialidad = em.id_especialidad_fk
+            AND em.id_especialidad_fk = (
+                SELECT MIN(id_especialidad_fk)
+                FROM especialidades_medicos
+                WHERE id_medico_fk = m.id_medico
+            )
         """
 
         condiciones = []
