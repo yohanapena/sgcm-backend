@@ -1,0 +1,1 @@
+from app.modules.medicos.horarios_medicos.controller import router

@@ -1,0 +1,2 @@
+class HorarioMedicoRepository:
+    pass

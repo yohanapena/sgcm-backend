@@ -1,0 +1,2 @@
+class HorarioMedico:
+    pass

@@ -4,8 +4,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.shared.exceptions.handlers import registrar_handlers
 
-
-
 app = FastAPI(
     title="SGCM Backend",
     description="Backend del Gestor de Citas Médicas",
@@ -21,7 +19,6 @@ app.add_middleware(
 )
 
 registrar_handlers(app)
-
 
 @app.get("/", tags=["salud"])
 def read_root():
@@ -46,11 +43,11 @@ app.include_router(dashboard_router, prefix="/dashboard", tags=["dashboard"])
 # from app.modules.signos_vitales.routes import router as signos_vitales_router
 # app.include_router(signos_vitales_router, prefix="/signos_vitales", tags=["signos_vitales"])
 
-# from app.modules.medicos.routes import router as medicos_router
-# app.include_router(medicos_router, prefix="/medicos", tags=["medicos"])
+from app.modules.medicos.routes import router as medicos_router
+app.include_router(medicos_router, prefix="/medicos", tags=["medicos"])
 
-# from app.modules.citas.routes import router as citas_router
-# app.include_router(citas_router, prefix="/citas", tags=["citas"])
+from app.modules.citas.routes import router as citas_router
+app.include_router(citas_router, prefix="/citas", tags=["citas"])
 
 # from app.modules.consultas.routes import router as consultas_router
 # app.include_router(consultas_router, prefix="/consultas", tags=["consultas"])
