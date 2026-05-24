@@ -1,0 +1,60 @@
+from typing import Optional
+
+from pydantic import BaseModel
+from app.modules.usuarios.schema import UsuarioResponse
+
+
+class LoginRequest(BaseModel):
+    usuario: str
+    contrasena: str
+
+
+class LoginResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    id_usuario: int
+    usuario: str
+    rol: str
+    estado: str
+    id_medico_fk: Optional[int] = None
+
+
+class LoginUser(BaseModel):
+    id_usuario: int
+    usuario: str
+    rol: str
+    estado: str
+    id_medico_fk: Optional[int] = None
+
+
+class LoginData(BaseModel):
+    token: str
+    user: LoginUser
+
+
+class LoginDataResponse(BaseModel):
+    data: LoginData
+
+
+class MeResponse(BaseModel):
+    id_usuario: int
+    usuario: str
+    rol: str
+    id_medico_fk: Optional[int] = None
+
+
+class MeDataResponse(BaseModel):
+    data: MeResponse
+
+
+class UsuarioDataResponse(BaseModel):
+    data: UsuarioResponse
+
+
+class UsuarioEstadoResponse(BaseModel):
+    id_usuario: int
+    status: str
+
+
+class UsuarioEstadoDataResponse(BaseModel):
+    data: UsuarioEstadoResponse
