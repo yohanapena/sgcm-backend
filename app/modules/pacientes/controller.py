@@ -26,7 +26,6 @@ def listar_pacientes(
     service: PacienteService = Depends(get_service),
     usuario_actual: dict = Depends(solo_administrativo)
 ):
-@router.get("", response_model=list[PacienteResponse])
     return service.listar_pacientes()
 
 
