@@ -344,9 +344,6 @@ class CitaRepository:
         if condiciones:
             query += "\nWHERE " + " AND ".join(condiciones)
 
-        # Evitar duplicados cuando un médico tiene varias especialidades
-        query += "\nGROUP BY c.id_cita"
-
         query += "\nORDER BY c.fecha, c.hora"
 
         cursor.execute(query, tuple(valores))
