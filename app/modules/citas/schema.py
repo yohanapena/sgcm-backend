@@ -19,6 +19,11 @@ class CitaResponse(BaseModel):
     observacion: Optional[str] = None
     id_horario_medico_fk: int
     id_paciente_fk: int
+    paciente_nombre: Optional[str] = None
+    paciente_apellido: Optional[str] = None
+    medico_nombre: Optional[str] = None
+    medico_apellido: Optional[str] = None
+    especialidad: Optional[str] = None
 
 class CitaCancelarRequest(BaseModel):
     motivo: str
