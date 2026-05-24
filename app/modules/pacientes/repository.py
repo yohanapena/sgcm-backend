@@ -139,6 +139,19 @@ class PacienteRepository(IPacienteRepository):
             cursor.close()
             conexion.close()
 
+    def listar_pacientes(self) -> list:
+        conexion = get_connection()
+        try:
+            cursor = conexion.cursor(dictionary=True)
+            cursor.execute(
+                "SELECT * FROM pacientes ORDER BY nombre, primer_apellido"
+            )
+            filas = cursor.fetchall()
+            return [Paciente(**fila) for fila in filas]
+        finally:
+            cursor.close()
+            conexion.close()
+
     def listar_alergias(self, id_paciente_fk: int) -> list:
         conexion = get_connection()
         try:

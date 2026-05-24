@@ -57,6 +57,9 @@ class PacienteService:
     def buscar_pacientes(self, criterio: str) -> list:
         resultados = self.repositorio.buscar_pacientes(criterio)
         return resultados
+
+    def listar_pacientes(self) -> list:
+        return self.repositorio.listar_pacientes()
     
     def obtener_por_id(self, id_paciente: int) -> Paciente:
         paciente = self.repositorio.obtener_por_id(id_paciente)

@@ -21,6 +21,15 @@ def registrar_paciente(
     return service.registrar_paciente(datos)
 
 
+@router.get("", response_model=list[PacienteResponse])
+@router.get("/", response_model=list[PacienteResponse])
+def listar_pacientes(
+    service: PacienteService = Depends(get_service),
+    usuario_actual: dict = Depends(solo_administrativo)
+):
+    return service.listar_pacientes()
+
+
 @router.get("/buscar", response_model=list[PacienteResponse])
 def buscar_pacientes(
     q: str,

@@ -1,4 +1,5 @@
 from app.core.database import get_connection
+from datetime import timedelta
 
 class CitaRepository:
 
@@ -289,6 +290,63 @@ class CitaRepository:
         connection.close()
 
         return resultado
+
+    def listar_citas(
+        self,
+        medico_id: int = None,
+        paciente_id: int = None,
+        estado: str = None
+    ):
+
+        connection = get_connection()
+        cursor = connection.cursor(dictionary=True)
+
+        query = """
+        SELECT
+            c.id_cita,
+            c.fecha,
+            c.hora,
+            c.estado,
+            c.observacion,
+            c.id_horario_medico_fk,
+            c.id_paciente_fk
+        FROM citas c
+        """
+
+        condiciones = []
+        valores = []
+
+        if medico_id is not None:
+            condiciones.append("hm.id_medico_fk = %s")
+            valores.append(medico_id)
+            query += "\n        INNER JOIN horarios_medicos hm ON c.id_horario_medico_fk = hm.id_horario_medico"
+        if paciente_id is not None:
+            condiciones.append("c.id_paciente_fk = %s")
+            valores.append(paciente_id)
+        if estado is not None:
+            condiciones.append("c.estado = %s")
+            valores.append(estado)
+
+        if condiciones:
+            query += "\nWHERE " + " AND ".join(condiciones)
+
+        query += "\nORDER BY c.fecha, c.hora"
+
+        cursor.execute(query, tuple(valores))
+        resultados = cursor.fetchall()
+
+        # Convertir campos hora (tiempo) que MySQL puede devolver como timedelta
+        for row in resultados:
+            if "hora" in row and isinstance(row["hora"], timedelta):
+                total_seconds = int(row["hora"].total_seconds())
+                horas = total_seconds // 3600
+                minutos = (total_seconds % 3600) // 60
+                segundos = total_seconds % 60
+                row["hora"] = f"{horas:02}:{minutos:02}:{segundos:02}"
+
+        cursor.close()
+        connection.close()
+        return resultados
     
     def obtener_citas_medico_fecha(
         self,

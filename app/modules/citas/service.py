@@ -163,3 +163,16 @@ class CitaService:
         return {
             "data": cita
         }
+
+    def listar_citas(
+        self,
+        medico_id: int = None,
+        paciente_id: int = None,
+        estado: str = None
+    ):
+
+        return self.repository.listar_citas(
+            medico_id,
+            paciente_id,
+            estado
+        )

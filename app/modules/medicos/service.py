@@ -124,3 +124,6 @@ class MedicoService:
             id_medico,
             datos.estado
         )
+
+    def listar_medicos(self, query: str = None):
+        return self.repository.listar_medicos(query)

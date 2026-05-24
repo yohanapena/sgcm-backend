@@ -8,6 +8,7 @@ app = FastAPI(
     title="SGCM Backend",
     description="Backend del Gestor de Citas Médicas",
     version="0.1.0",
+    redirect_slashes=True
 )
 
 app.add_middleware(

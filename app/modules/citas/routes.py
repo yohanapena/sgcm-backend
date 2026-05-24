@@ -18,6 +18,18 @@ router = APIRouter()
 cita_service = CitaService()
 
 
+@router.get("", response_model=list[CitaResponse])
+@router.get("/", response_model=list[CitaResponse])
+def listar_citas(
+    medico_id: int = None,
+    paciente_id: int = None,
+    estado: str = None
+):
+    return cita_service.listar_citas(
+        medico_id, paciente_id, estado
+    )
+
+
 @router.post(
     "/",
     response_model=CitaResponse,
@@ -45,16 +57,6 @@ def cancelar_cita(
     return cita_service.cancelar_cita(
         id_cita,
         request.motivo
-    )
-
-@router.put("/{id_cita}/cancelar")
-def cancelar_cita(
-    id_cita: int,
-    data: CitaCancelarRequest
-):
-    return cita_service.cancelar_cita(
-        id_cita=id_cita,
-        motivo=data.motivo
     )
 
 @router.get("/paciente/{id_paciente}")

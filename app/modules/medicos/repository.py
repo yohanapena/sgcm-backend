@@ -246,6 +246,38 @@ class MedicoRepository:
         connection.close()
 
         return resultados
+
+    def listar_medicos(self, query=None):
+
+        connection = get_connection()
+        cursor = connection.cursor(dictionary=True)
+
+        sql = """
+        SELECT
+            id_medico,
+            nombre,
+            primer_apellido,
+            segundo_apellido,
+            tarjeta_profesional,
+            estado
+        FROM medicos
+        """
+
+        valores = []
+
+        if query:
+            sql += "\nWHERE nombre LIKE %s OR primer_apellido LIKE %s OR segundo_apellido LIKE %s OR tarjeta_profesional LIKE %s"
+            filtro = f"%{query}%"
+            valores.extend([filtro, filtro, filtro, filtro])
+
+        sql += "\nORDER BY nombre, primer_apellido"
+
+        cursor.execute(sql, tuple(valores))
+        resultados = cursor.fetchall()
+        cursor.close()
+        connection.close()
+
+        return resultados
     
     def obtener_medico_por_id(self, id_medico):
 
