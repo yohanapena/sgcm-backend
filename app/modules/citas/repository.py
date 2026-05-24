@@ -309,8 +309,18 @@ class CitaRepository:
             c.estado,
             c.observacion,
             c.id_horario_medico_fk,
-            c.id_paciente_fk
+            c.id_paciente_fk,
+            p.nombre as paciente_nombre,
+            p.primer_apellido as paciente_apellido,
+            m.nombre as medico_nombre,
+            m.primer_apellido as medico_apellido,
+            e.nombre_especialidad as especialidad
         FROM citas c
+        LEFT JOIN pacientes p ON p.id_paciente = c.id_paciente_fk
+        LEFT JOIN horarios_medicos hm ON hm.id_horario_medico = c.id_horario_medico_fk
+        LEFT JOIN medicos m ON m.id_medico = hm.id_medico_fk
+        LEFT JOIN especialidades_medicos em ON em.id_medico_fk = m.id_medico
+        LEFT JOIN especialidades e ON e.id_especialidad = em.id_especialidad_fk
         """
 
         condiciones = []
@@ -319,7 +329,6 @@ class CitaRepository:
         if medico_id is not None:
             condiciones.append("hm.id_medico_fk = %s")
             valores.append(medico_id)
-            query += "\n        INNER JOIN horarios_medicos hm ON c.id_horario_medico_fk = hm.id_horario_medico"
         if paciente_id is not None:
             condiciones.append("c.id_paciente_fk = %s")
             valores.append(paciente_id)
