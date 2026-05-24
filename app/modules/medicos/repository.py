@@ -246,3 +246,99 @@ class MedicoRepository:
         connection.close()
 
         return resultados
+    
+    def obtener_medico_por_id(self, id_medico):
+
+        connection = get_connection()
+        cursor = connection.cursor(dictionary=True)
+
+        cursor.execute(
+            "SELECT * FROM medicos WHERE id_medico = %s",
+            (id_medico,)
+        )
+
+        medico = cursor.fetchone()
+
+        cursor.close()
+        connection.close()
+
+        return medico
+    
+    def actualizar_medico(self, id_medico, medico):
+
+        connection = get_connection()
+        cursor = connection.cursor(dictionary=True)
+
+        query = """
+            UPDATE medicos
+            SET nombre = %s,
+                primer_apellido = %s,
+                segundo_apellido = %s,
+                tarjeta_profesional = %s,
+                estado = %s
+            WHERE id_medico = %s
+        """
+
+        valores = (
+            medico.nombre,
+            medico.primer_apellido,
+            medico.segundo_apellido,
+            medico.tarjeta_profesional,
+            medico.estado,
+            id_medico
+        )
+
+        cursor.execute(query, valores)
+
+        connection.commit()
+
+        cursor.execute(
+            "SELECT * FROM medicos WHERE id_medico = %s",
+            (id_medico,)
+        )
+
+        medico_actualizado = cursor.fetchone()
+
+        cursor.close()
+        connection.close()
+
+        return medico_actualizado
+    
+    def cambiar_estado(self, id_medico, estado):
+
+        connection = get_connection()
+        cursor = connection.cursor(dictionary=True)
+
+        cursor.execute(
+            "SELECT * FROM medicos WHERE id_medico = %s",
+            (id_medico,)
+        )
+
+        medico = cursor.fetchone()
+
+        if not medico:
+            cursor.close()
+            connection.close()
+            return None
+
+        query = """
+            UPDATE medicos
+            SET estado = %s
+            WHERE id_medico = %s
+        """
+
+        cursor.execute(query, (estado, id_medico))
+
+        connection.commit()
+
+        cursor.execute(
+            "SELECT id_medico, estado FROM medicos WHERE id_medico = %s",
+            (id_medico,)
+        )
+
+        resultado = cursor.fetchone()
+
+        cursor.close()
+        connection.close()
+
+        return resultado

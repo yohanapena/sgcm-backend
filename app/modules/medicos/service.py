@@ -81,3 +81,46 @@ class MedicoService:
         return self.repository.obtener_horarios(
             id_medico
         )
+    
+    def actualizar_medico(self, id_medico, medico):
+
+        medico_existente = self.repository.obtener_medico_por_id(
+            id_medico
+        )
+
+        if not medico_existente:
+
+            raise HTTPException(
+                status_code=404,
+                detail="Medico no encontrado"
+            )
+
+        medico_actualizado = self.repository.actualizar_medico(
+            id_medico,
+            medico
+        )
+
+        return {
+            "data": medico_actualizado
+        }
+    
+    def cambiar_estado(self, id_medico, datos):
+
+        medico = self.repository.obtener_medico_por_id(id_medico)
+
+        if not medico:
+            raise HTTPException(
+                status_code=404,
+                detail="Médico no encontrado"
+            )
+
+        if datos.estado not in ["Activo", "Inactivo"]:
+            raise HTTPException(
+                status_code=422,
+                detail="estado debe ser Activo o Inactivo"
+            )
+
+        return self.repository.cambiar_estado(
+            id_medico,
+            datos.estado
+        )
