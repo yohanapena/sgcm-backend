@@ -27,8 +27,8 @@ def get_usuario_actual(token: str = Depends(_obtener_token_credenciales)) -> Dic
 
 
 def solo_administrativo(usuario_actual: dict = Depends(get_usuario_actual)) -> dict:
-    if usuario_actual.get("rol") != "Administrativo":
-        raise HTTPException(status_code=HTTP_403_FORBIDDEN, detail="Requiere rol administrativo")
+    if usuario_actual.get("rol") not in ["Administrativo", "Administrador"]:
+        raise HTTPException(status_code=HTTP_403_FORBIDDEN, detail="No autorizado")
     return usuario_actual
 
 
