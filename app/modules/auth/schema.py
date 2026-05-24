@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Literal, Optional
 
 from pydantic import BaseModel
 from app.modules.usuarios.schema import UsuarioResponse
@@ -14,7 +14,7 @@ class LoginResponse(BaseModel):
     token_type: str = "bearer"
     id_usuario: int
     usuario: str
-    rol: str
+    rol: Literal['Administrativo', 'Medico', 'Administrador']
     estado: str
     id_medico_fk: Optional[int] = None
 
@@ -22,7 +22,7 @@ class LoginResponse(BaseModel):
 class LoginUser(BaseModel):
     id_usuario: int
     usuario: str
-    rol: str
+    rol: Literal['Administrativo', 'Medico', 'Administrador']
     estado: str
     id_medico_fk: Optional[int] = None
 
@@ -39,7 +39,7 @@ class LoginDataResponse(BaseModel):
 class MeResponse(BaseModel):
     id_usuario: int
     usuario: str
-    rol: str
+    rol: Literal['Administrativo', 'Medico', 'Administrador']
     id_medico_fk: Optional[int] = None
 
 

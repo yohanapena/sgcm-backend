@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field, model_validator
 class UsuarioRol(str, Enum):
     ADMINISTRATIVO = "Administrativo"
     MEDICO = "Medico"
+    ADMINISTRADOR = "Administrador"
 
 
 class UsuarioEstado(str, Enum):
