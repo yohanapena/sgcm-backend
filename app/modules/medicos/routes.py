@@ -18,12 +18,12 @@ router = APIRouter()
 medico_service = MedicoService()
 
 @router.get("", response_model=list[MedicoResponse])
-@router.get("/", response_model=list[MedicoResponse])
+@router.get("", response_model=list[MedicoResponse])
 def listar_medicos(query: str = None):
     return medico_service.listar_medicos(query)
 
 @router.post(
-    "/",
+    "",
     response_model=MedicoResponse,
     status_code=201
 )

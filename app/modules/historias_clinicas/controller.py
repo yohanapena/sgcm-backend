@@ -12,7 +12,7 @@ def get_service():
     return HistoriaClinicaService(repositorio)
 
 
-@router.get("/", response_model=HistoriaClinicaResponse | None)
+@router.get("", response_model=HistoriaClinicaResponse | None)
 def obtener_historia_por_paciente(
     pacienteId: int,
     service: HistoriaClinicaService = Depends(get_service),
@@ -21,7 +21,7 @@ def obtener_historia_por_paciente(
     return service.obtener_por_paciente(pacienteId)
 
 
-@router.post("/", response_model=HistoriaClinicaResponse)
+@router.post("", response_model=HistoriaClinicaResponse)
 def crear_historia_clinica(
     datos: HistoriaClinicaCrearRequest,
     service: HistoriaClinicaService = Depends(get_service),

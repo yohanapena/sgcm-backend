@@ -19,7 +19,7 @@ cita_service = CitaService()
 
 
 @router.get("", response_model=list[CitaResponse])
-@router.get("/", response_model=list[CitaResponse])
+@router.get("", response_model=list[CitaResponse])
 def listar_citas(
     medico_id: int = None,
     paciente_id: int = None,
@@ -31,7 +31,7 @@ def listar_citas(
 
 
 @router.post(
-    "/",
+    "",
     response_model=CitaResponse,
     status_code=201
 )

@@ -9,7 +9,7 @@ router = APIRouter()
 service = SignosVitalesService()
 
 
-@router.post("/", response_model=SignosVitalesResponse)
+@router.post("", response_model=SignosVitalesResponse)
 def registrar_signos_vitales(
     signos: SignosVitalesCreate,
     usuario_actual: dict = Depends(administrativo_o_medico)
@@ -17,7 +17,7 @@ def registrar_signos_vitales(
     return service.registrar_signos_vitales(signos)
 
 
-@router.get("/")
+@router.get("")
 def listar_signos(
     id_consulta_fk: Optional[int] = None,
     id_historia_clinica_fk: Optional[int] = None,

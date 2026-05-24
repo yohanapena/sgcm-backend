@@ -12,7 +12,7 @@ def get_service():
     return PacienteService(repositorio)
 
 
-@router.post("/", response_model=PacienteResponse)
+@router.post("", response_model=PacienteResponse)
 def registrar_paciente(
     datos: PacienteCrearRequest,
     service: PacienteService = Depends(get_service),
@@ -22,7 +22,7 @@ def registrar_paciente(
 
 
 @router.get("", response_model=list[PacienteResponse])
-@router.get("/", response_model=list[PacienteResponse])
+@router.get("", response_model=list[PacienteResponse])
 def listar_pacientes(
     service: PacienteService = Depends(get_service),
     usuario_actual: dict = Depends(solo_administrativo)

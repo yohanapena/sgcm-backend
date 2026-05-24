@@ -13,7 +13,7 @@ router = APIRouter()
 consulta_service = ConsultaService()
 
 
-@router.post("/")
+@router.post("")
 def registrar_consulta(
     consulta: ConsultaCrearRequest
 ):
@@ -29,7 +29,7 @@ def obtener_historia_clinica_paciente(
     return consulta_service.obtener_historia_clinica_paciente(id_paciente)
 
 
-@router.get("/")
+@router.get("")
 def obtener_consultas(
     id_historia_clinica_fk: int
 ):
