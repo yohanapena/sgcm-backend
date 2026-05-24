@@ -4,28 +4,28 @@ from abc import ABC, abstractmethod
 class ISignosVitalesRepository(ABC):
 
     @abstractmethod
-    def crear_signos_vitales(self):
-        pass
-
-    @abstractmethod
-    def obtener_por_historia(self):
+    def crear(self):
         pass
 
     @abstractmethod
     def obtener_por_consulta(self):
         pass
 
+    @abstractmethod
+    def obtener_por_historia(self):
+        pass
+
 
 class ISignosVitalesService(ABC):
 
     @abstractmethod
-    def registrar_signos_vitales(self):
+    def registrar(self):
         pass
 
     @abstractmethod
-    def obtener_signos_historia(self):
+    def obtener_por_consulta(self):
         pass
 
     @abstractmethod
-    def obtener_signos_consulta(self):
+    def obtener_por_historia(self):
         pass

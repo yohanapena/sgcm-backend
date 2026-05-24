@@ -1,0 +1,1 @@
+from app.modules.historias_clinicas.controller import router

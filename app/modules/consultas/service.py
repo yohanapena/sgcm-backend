@@ -78,3 +78,23 @@ class ConsultaService(IConsultaService):
         return self.repository.obtener_servicios_consulta(
             id_consulta
         )
+        
+    def obtener_historia_clinica_paciente(
+        self,
+        id_paciente: int
+    ):
+        # Obtener historia clínica con JOIN a pacientes
+        historia = self.repository.obtener_historia_clinica(id_paciente)
+        
+        if not historia:
+            return {"paciente": None, "historia_clinica": None, "consultas": []}
+        
+        # Obtener consultas ordenadas por fecha DESC
+        consultas = self.repository.obtener_consultas_historia(
+            historia["id_historia_clinica"]
+        )
+        
+        return {
+            "historia_clinica": historia,
+            "consultas": consultas
+        }

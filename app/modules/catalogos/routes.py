@@ -1,0 +1,1 @@
+from app.modules.catalogos.controller import router
