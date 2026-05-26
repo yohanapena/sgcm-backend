@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import List, Optional
 
 
@@ -6,9 +6,11 @@ class SignosVitalesConsulta(BaseModel):
     peso: float
     estatura: float
     temperatura: float
-    presion_arterial: str
-    frecuencia_cardiaca: int
-    saturacion_oxigeno: int
+    presion_arterial: str = Field(alias="presion")
+    frecuencia_cardiaca: int = Field(alias="frecuenciaCardiaca")
+    saturacion_oxigeno: int = Field(alias="saturacion")
+
+    model_config = {"populate_by_name": True}
 
 class ConsultaCrearRequest(BaseModel):
     id_cita_fk: int
