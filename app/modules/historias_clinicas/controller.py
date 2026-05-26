@@ -14,11 +14,11 @@ def get_service():
 
 @router.get("", response_model=HistoriaClinicaResponse | None)
 def obtener_historia_por_paciente(
-    pacienteId: int,
+    id_paciente: int,
     service: HistoriaClinicaService = Depends(get_service),
     usuario_actual: dict = Depends(administrativo_o_medico)
 ):
-    return service.obtener_por_paciente(pacienteId)
+    return service.obtener_por_paciente(id_paciente)
 
 
 @router.post("", response_model=HistoriaClinicaResponse)
