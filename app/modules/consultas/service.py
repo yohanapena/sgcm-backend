@@ -28,9 +28,9 @@ class ConsultaService(IConsultaService):
                     "peso": consulta.signos_vitales.peso,
                     "estatura": consulta.signos_vitales.estatura,
                     "temperatura": consulta.signos_vitales.temperatura,
-                    "presion_arterial": consulta.signos_vitales.presion_arterial,
-                    "frecuencia_cardiaca": consulta.signos_vitales.frecuencia_cardiaca,
-                    "saturacion_oxigeno": consulta.signos_vitales.saturacion_oxigeno,
+                    "presion_arterial": consulta.signos_vitales.presion,
+                    "frecuencia_cardiaca": consulta.signos_vitales.frecuenciaCardiaca,
+                    "saturacion_oxigeno": consulta.signos_vitales.saturacion,
                     "id_historia_clinica_fk": consulta.id_historia_clinica_fk,
                     "id_consulta_fk": id_consulta
                 })
