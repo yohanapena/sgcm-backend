@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from typing import List
 from typing import List, Optional
 
 
@@ -16,7 +15,7 @@ class ConsultaCrearRequest(BaseModel):
     id_historia_clinica_fk: int
     diagnostico: str
     observacion: str
-    servicios_ids: List[int]
+    servicios_ids: Optional[List[int]] = []
     signos_vitales: Optional[SignosVitalesConsulta] = None
 
 class ConsultaResponse(BaseModel):
