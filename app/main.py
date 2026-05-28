@@ -1,23 +1,51 @@
 import os
 from dotenv import load_dotenv
 from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from app.shared.exceptions.handlers import registrar_handlers
+
+class UTF8JSONResponse(JSONResponse):
+    media_type = "application/json; charset=utf-8"
+
 
 app = FastAPI(
     title="SGCM Backend",
     description="Backend del Gestor de Citas Médicas",
     version="0.1.0",
-    redirect_slashes=True
+    redirect_slashes=True,
+    default_response_class=UTF8JSONResponse,
 )
+
+# Configurar origins CORS permitidos
+allowed_origins = [
+    "http://127.0.0.1:5500",
+    "http://localhost:5500",
+    "http://127.0.0.1:5173",
+    "http://localhost:5173",
+]
+# Agregar FRONTEND_URL si está configurado en variables de entorno
+frontend_url = os.getenv("FRONTEND_URL")
+if frontend_url:
+    allowed_origins.append(frontend_url)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[os.getenv("FRONTEND_URL", "*")],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.middleware("http")
+async def ensure_json_charset(request, call_next):
+    response = await call_next(request)
+    ct = response.headers.get("content-type")
+    if ct and ct.startswith("application/json") and "charset" not in ct.lower():
+        response.headers["content-type"] = ct + "; charset=utf-8"
+    return response
+
 
 registrar_handlers(app)
 

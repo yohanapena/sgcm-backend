@@ -17,6 +17,7 @@ class LoginResponse(BaseModel):
     rol: Literal['Administrativo', 'Medico', 'Administrador']
     estado: str
     id_medico_fk: Optional[int] = None
+    nombre_completo: Optional[str] = None
 
 
 class LoginUser(BaseModel):
@@ -25,6 +26,7 @@ class LoginUser(BaseModel):
     rol: Literal['Administrativo', 'Medico', 'Administrador']
     estado: str
     id_medico_fk: Optional[int] = None
+    nombre_completo: Optional[str] = None
 
 
 class LoginData(BaseModel):

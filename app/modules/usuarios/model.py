@@ -24,3 +24,4 @@ class Usuario:
     id_medico_fk: Optional[int] = None
     id_usuario: Optional[int] = None
     medico_nombre: Optional[str] = None
+    nombre_completo: Optional[str] = None

@@ -54,6 +54,7 @@ class AuthService:
             rol=usuario_encontrado.rol.value,
             estado=usuario_encontrado.estado.value,
             id_medico_fk=usuario_encontrado.id_medico_fk,
+            nombre_completo=usuario_encontrado.nombre_completo,
         )
 
     def crear_usuario(self, datos: UsuarioCrearRequest) -> UsuarioResponse:

@@ -140,10 +140,15 @@ class ConsultaRepository(IConsultaRepository):
         query = """
         SELECT hc.id_historia_clinica, hc.resumen, hc.fecha_apertura,
         hc.antecedentes_personales, hc.antecedentes_familiares,
-        p.nombre, p.primer_apellido, p.numero_identificacion
+        p.id_paciente, p.nombre, p.primer_apellido, p.numero_identificacion,
+        GROUP_CONCAT(pa.alergia SEPARATOR ',') AS alergias
         FROM historias_clinicas hc
         INNER JOIN pacientes p ON hc.id_paciente_fk = p.id_paciente
+        LEFT JOIN paciente_alergias pa ON pa.id_paciente_fk = p.id_paciente
         WHERE hc.id_paciente_fk = %s
+        GROUP BY hc.id_historia_clinica, hc.resumen, hc.fecha_apertura,
+            hc.antecedentes_personales, hc.antecedentes_familiares,
+            p.id_paciente, p.nombre, p.primer_apellido, p.numero_identificacion
         """
         cursor.execute(query, (id_paciente,))
         resultado = cursor.fetchone()

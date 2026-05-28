@@ -44,6 +44,7 @@ async def login(
         "rol": result.rol,
         "estado": result.estado,
         "id_medico_fk": result.id_medico_fk,
+        "nombre_completo": result.nombre_completo,
     }
     return {"data": {"token": result.access_token, "user": user}}
 

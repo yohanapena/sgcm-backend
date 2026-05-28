@@ -1,5 +1,8 @@
 from app.modules.pacientes.model import Paciente
-from app.modules.pacientes.schema import PacienteCrearRequest, PacienteActualizarRequest
+from app.modules.pacientes.schema import (
+    PacienteCrearRequest,
+    PacienteActualizarRequest,
+)
 from app.modules.pacientes.contracts import IPacienteRepository
 from app.shared.exceptions.errors import SGCMConflictError, SGCMNotFoundError
 
@@ -30,6 +33,8 @@ class PacienteService:
             id_regimen_fk=datos.id_regimen_fk,
             sexo=datos.sexo,
             tipo_sangre=datos.tipo_sangre,
+            contactos=datos.contactos,
+            alergias=datos.alergias,
         )
         
         # Guardar en la base de datos y retornar
@@ -86,6 +91,12 @@ class PacienteService:
             raise SGCMNotFoundError(f"No se encontró un paciente con id {id_paciente}")
         
         return self.repositorio.listar_alergias(id_paciente)
+
+    def reemplazar_alergias(self, id_paciente: int, alergias: list[str]) -> Paciente:
+        paciente = self.repositorio.obtener_por_id(id_paciente)
+        if not paciente:
+            raise SGCMNotFoundError(f"No se encontró un paciente con id {id_paciente}")
+        return self.repositorio.reemplazar_alergias(id_paciente, alergias)
 
     def eliminar_alergia(self, id_paciente: int, id_alergia: int) -> dict:
         # Verificar que la alergia pertenece al paciente

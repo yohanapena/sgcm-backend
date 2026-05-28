@@ -1,8 +1,13 @@
 from fastapi import APIRouter, Depends
-from app.modules.pacientes.schema import PacienteCrearRequest, PacienteResponse, PacienteActualizarRequest
+from app.modules.pacientes.schema import (
+    PacienteCrearRequest,
+    PacienteResponse,
+    PacienteActualizarRequest,
+    AlergiasActualizarRequest,
+)
 from app.modules.pacientes.service import PacienteService
 from app.modules.pacientes.repository import PacienteRepository
-from app.core.dependencies import solo_administrativo
+from app.core.dependencies import solo_administrativo, administrativo_o_medico
 
 router = APIRouter()
 
@@ -24,7 +29,7 @@ def registrar_paciente(
 @router.get("", response_model=list[PacienteResponse])
 def listar_pacientes(
     service: PacienteService = Depends(get_service),
-    usuario_actual: dict = Depends(solo_administrativo)
+    usuario_actual: dict = Depends(administrativo_o_medico)
 ):
     return service.listar_pacientes()
 
@@ -33,7 +38,7 @@ def listar_pacientes(
 def buscar_pacientes(
     q: str,
     service: PacienteService = Depends(get_service),
-    usuario_actual: dict = Depends(solo_administrativo)
+    usuario_actual: dict = Depends(administrativo_o_medico)
 ):
     return service.buscar_pacientes(q)
 
@@ -52,7 +57,7 @@ def actualizar_paciente(
 def obtener_paciente(
     id_paciente: int,
     service: PacienteService = Depends(get_service),
-    usuario_actual: dict = Depends(solo_administrativo)
+    usuario_actual: dict = Depends(administrativo_o_medico)
 ):
     return service.obtener_por_id(id_paciente)
 
@@ -74,6 +79,16 @@ def agregar_alergia(
     usuario_actual: dict = Depends(solo_administrativo)
 ):
     return service.agregar_alergia(id_paciente, datos["alergia"])
+
+
+@router.patch("/{id_paciente}/alergias", response_model=PacienteResponse)
+def reemplazar_alergias(
+    id_paciente: int,
+    datos: AlergiasActualizarRequest,
+    service: PacienteService = Depends(get_service),
+    usuario_actual: dict = Depends(administrativo_o_medico)  # ← fix
+):
+    return service.reemplazar_alergias(id_paciente, datos.alergias)
 
 
 @router.delete("/{id_paciente}/alergias/{id_alergia}")

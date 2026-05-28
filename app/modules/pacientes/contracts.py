@@ -34,5 +34,9 @@ class IPacienteRepository(ABC):
         pass
 
     @abstractmethod
+    def reemplazar_alergias(self, id_paciente_fk: int, alergias: list[str]):
+        pass
+
+    @abstractmethod
     def eliminar_alergia(self, id_alergia: int, id_paciente_fk: int) -> bool:
         pass

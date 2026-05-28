@@ -4,7 +4,12 @@ from datetime import date
 
 
 class ContactoResponse(BaseModel):
-    id_contacto: int
+    id_contacto: Optional[int] = None
+    tipo: Optional[str] = None
+    dato_contacto: str
+
+
+class ContactoCrearRequest(BaseModel):
     tipo: Optional[str] = None
     dato_contacto: str
 
@@ -20,6 +25,7 @@ class PacienteCrearRequest(BaseModel):
     id_regimen_fk: int
     sexo: Optional[Literal['M', 'F']] = None
     tipo_sangre: Optional[Literal['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-']] = None
+    contactos: list[ContactoCrearRequest] = []
     alergias: list[str] = []
     
 
@@ -35,6 +41,10 @@ class PacienteActualizarRequest(BaseModel):
     sexo: Optional[Literal['M', 'F']] = None
     tipo_sangre: Optional[Literal['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-']] = None
     alergias: Optional[list[str]] = None
+
+
+class AlergiasActualizarRequest(BaseModel):
+    alergias: list[str]
 
 
 class PacienteResponse(BaseModel):
