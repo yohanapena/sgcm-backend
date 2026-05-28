@@ -49,6 +49,23 @@ class PacienteRepository(IPacienteRepository):
             )
             conexion.commit()
             paciente.id_paciente = cursor.lastrowid
+
+            # Guardar contactos
+            if getattr(paciente, 'contactos', None):
+                for contacto in paciente.contactos:
+                    cursor.execute(
+                        """
+                        INSERT INTO contactos (tipo, dato_contacto, id_paciente_fk)
+                        VALUES (%s, %s, %s)
+                        """,
+                        (
+                            contacto.get('tipo') if isinstance(contacto, dict) else contacto.tipo,
+                            contacto.get('dato_contacto') if isinstance(contacto, dict) else contacto.dato_contacto,
+                            paciente.id_paciente,
+                        )
+                    )
+                conexion.commit()
+
             return paciente
         finally:
             cursor.close()
