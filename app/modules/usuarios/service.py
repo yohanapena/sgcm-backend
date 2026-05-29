@@ -82,11 +82,19 @@ class UsuarioService(IUsuarioService):
                 detail="El campo id_medico_fk es obligatorio cuando el rol es Medico",
             )
 
+        if datos.contrasena is not None:
+            # Compatibilidad con frontend: si llega '' no se actualiza
+            if datos.contrasena != "":
+                datos.contrasena = hashear_contrasena(datos.contrasena)
+            else:
+                datos.contrasena = None
+
         if datos.rol is None and usuario_existente.rol == UsuarioRol.MEDICO and datos.id_medico_fk is None:
             datos.id_medico_fk = usuario_existente.id_medico_fk
 
         usuario_actualizado = self.repository.actualizar_usuario(id_usuario, datos)
         return self._mapear_response(usuario_actualizado)
+
 
     def obtener_resumen_dashboard(self):
         return self.repository.obtener_resumen_dashboard()

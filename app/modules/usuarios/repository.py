@@ -123,7 +123,13 @@ class UsuarioRepository(IUsuarioRepository):
                 campos.append("id_medico_fk = %s")
                 valores.append(datos.id_medico_fk)
 
+            # contrasena: solo si viene ya hasheada desde service
+            if getattr(datos, "contrasena", None) is not None:
+                campos.append("contrasena = %s")
+                valores.append(datos.contrasena)
+
             if not campos:
+
                 cursor.close()
                 return self.obtener_por_id(id_usuario)
 

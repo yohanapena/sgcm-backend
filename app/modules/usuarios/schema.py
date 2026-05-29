@@ -32,9 +32,11 @@ class UsuarioCrearRequest(BaseModel):
 
 class UsuarioActualizarRequest(BaseModel):
     usuario: Optional[str] = Field(None, min_length=3, max_length=50)
+    contrasena: Optional[str] = None
     rol: Optional[UsuarioRol] = None
     estado: Optional[UsuarioEstado] = None
     id_medico_fk: Optional[int] = None
+
 
     @model_validator(mode="after")
     def validar_medico(self):
