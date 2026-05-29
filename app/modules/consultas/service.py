@@ -57,7 +57,7 @@ class ConsultaService(IConsultaService):
         id_historia_clinica_fk
     ):
 
-        return self.repository.obtener_por_historia(
+        return self.repository.obtener_consultas_historia(
             id_historia_clinica_fk
         )
     

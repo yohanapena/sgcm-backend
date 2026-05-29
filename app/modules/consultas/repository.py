@@ -160,9 +160,14 @@ class ConsultaRepository(IConsultaRepository):
         connection = get_connection()
         cursor = connection.cursor(dictionary=True)
         query = """
-        SELECT co.id_consulta, c.fecha, co.diagnostico, co.observacion
+        SELECT co.id_consulta, co.id_cita_fk, c.fecha, 
+               co.diagnostico, co.observacion,
+               sv.peso, sv.estatura, sv.temperatura, 
+               sv.presion_arterial, sv.frecuencia_cardiaca, 
+               sv.saturacion_oxigeno
         FROM consultas co
         INNER JOIN citas c ON co.id_cita_fk = c.id_cita
+        LEFT JOIN signos_vitales sv ON sv.id_consulta_fk = co.id_consulta
         WHERE co.id_historia_clinica_fk = %s
         ORDER BY c.fecha DESC
         """

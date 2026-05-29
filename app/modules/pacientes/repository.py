@@ -151,7 +151,22 @@ class PacienteRepository(IPacienteRepository):
                 (busqueda, busqueda, busqueda, busqueda)
             )
             filas = cursor.fetchall()
-            return [Paciente(**fila) for fila in filas]
+            pacientes = [Paciente(**fila) for fila in filas]
+
+            for paciente in pacientes:
+                cursor.execute(
+                    "SELECT id_contacto, tipo, dato_contacto FROM contactos WHERE id_paciente_fk = %s",
+                    (paciente.id_paciente,)
+                )
+                paciente.contactos = cursor.fetchall()
+
+                cursor.execute(
+                    "SELECT alergia FROM paciente_alergias WHERE id_paciente_fk = %s",
+                    (paciente.id_paciente,)
+                )
+                paciente.alergias = [row["alergia"] for row in cursor.fetchall()]
+
+            return pacientes
         finally:
             cursor.close()
             conexion.close()
@@ -178,7 +193,22 @@ class PacienteRepository(IPacienteRepository):
                 "SELECT * FROM pacientes ORDER BY nombre, primer_apellido"
             )
             filas = cursor.fetchall()
-            return [Paciente(**fila) for fila in filas]
+            pacientes = [Paciente(**fila) for fila in filas]
+
+            for paciente in pacientes:
+                cursor.execute(
+                    "SELECT id_contacto, tipo, dato_contacto FROM contactos WHERE id_paciente_fk = %s",
+                    (paciente.id_paciente,)
+                )
+                paciente.contactos = cursor.fetchall()
+
+                cursor.execute(
+                    "SELECT alergia FROM paciente_alergias WHERE id_paciente_fk = %s",
+                    (paciente.id_paciente,)
+                )
+                paciente.alergias = [row["alergia"] for row in cursor.fetchall()]
+
+            return pacientes
         finally:
             cursor.close()
             conexion.close()
