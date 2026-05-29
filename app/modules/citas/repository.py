@@ -428,6 +428,10 @@ class CitaRepository:
         if "observacion" in datos:
             campos.append("observacion = %s")
             valores.append(datos["observacion"])
+        
+        if "id_horario_medico_fk" in datos:
+            campos.append("id_horario_medico_fk = %s")
+            valores.append(datos["id_horario_medico_fk"])
 
         if campos:
 

@@ -32,3 +32,4 @@ class CitaActualizarRequest(BaseModel):
     fecha: Optional[str] = None
     hora: Optional[str] = None
     observacion: Optional[str] = None
+    id_horario_medico_fk: Optional[int] = None

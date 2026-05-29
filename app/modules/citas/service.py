@@ -113,7 +113,6 @@ class CitaService:
         }
     
     def actualizar_cita(self, id_cita, datos):
-
         cita = self.repository.obtener_cita_por_id(id_cita)
 
         if not cita:
@@ -138,6 +137,9 @@ class CitaService:
 
         if datos.observacion is not None:
             datos_actualizar["observacion"] = datos.observacion
+
+        if datos.id_horario_medico_fk is not None:
+            datos_actualizar["id_horario_medico_fk"] = datos.id_horario_medico_fk
 
         self.repository.actualizar_cita(
             id_cita,
