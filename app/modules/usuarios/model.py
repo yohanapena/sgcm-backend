@@ -7,6 +7,8 @@ from typing import Optional
 class UsuarioRol(str, Enum):
     ADMINISTRATIVO = "Administrativo"
     MEDICO = "Medico"
+    ADMINISTRADOR = "Administrador"
+
 
 
 class UsuarioEstado(str, Enum):
